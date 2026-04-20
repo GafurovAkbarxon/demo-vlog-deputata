@@ -1,0 +1,319 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:with="lang=${#locale.language}" >
+<head>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/article/view.css}" />
+
+    <title th:text="${article.seoTitle} ?: ${article.title}"></title>
+    <meta name="description" th:content="${article.seoDescription}" />
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="icon" th:href="@{/favicon.ico}" sizes="any">
+
+    <link rel="canonical"
+          th:href="@{/{lang}/article/{slug}(lang=${article.language.code}, slug=${article.slug})}" />
+    <link rel="alternate"
+          th:each="t : ${article.alternates}"
+          th:href="@{/{lang}/article/{slug}(lang=${t.language.code}, slug=${t.slug})}"
+          th:hreflang="${t.language.code}"/>
+
+    <link rel="alternate"
+          hreflang="x-default"
+          th:href="@{/ru/article/{slug}(slug=${article.slug})}"/>
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" th:content="${article.title}">
+    <meta property="og:description" th:content="${article.seoDescription}">
+    <meta property="og:image" th:content="@{/uploads/images/{name}(name=${article.coverName})}">
+    <meta property="og:locale" th:content="${article.language.ogLocale}">
+    <meta property="og:site_name" content="Vlog Deputata">
+    <meta property="og:url" th:content="@{/{lang}/article/{slug}(lang=${article.language.code}, slug=${article.slug})}">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "headline": "[[${article.title}]]",
+            "description": "[[${article.seoDescription}]]",
+            "datePublished": "[[${#temporals.format(article.createdAt, 'yyyy-MM-dd''T''HH:mm:ssXXX')}]]",
+            "dateModified": "[[${#temporals.format(article.updatedAt, 'yyyy-MM-dd''T''HH:mm:ssXXX')}]]",
+            "inLanguage": "[[${article.language.code}]]",
+            "author": {
+                "@type": "Organization",
+                "name": "Vlog Deputata"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Vlog Deputata",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "[[${baseUrl}]]/image/logo/logo.png"
+                }
+            },
+            "image": {
+                "@type": "ImageObject",
+                "url": "[[${baseUrl}]]/uploads/images/[[${article.coverName}]]",
+                "width": 1200,
+                "height": 630
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "[[${baseUrl}]]/[[${article.language.code}]]/article/[[${article.slug}]]"
+            }
+        }
+    </script>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Новости",
+                    "item": "[[${baseUrl}]]/[[${article.language.code}]]/article"
+                },
+
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "[[${article.title}]]"
+                }
+            ]
+        }
+    </script>
+
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+<div th:replace="fragments/result :: result(is_done, message)"></div>
+<main>
+    <div class="article-wrapper my-5">
+
+        <!-- Основная статья -->
+        <div class="article-main">
+
+            <!-- Зона рекламы -->
+            <div class="ad-space">Vlog Deputata</div>
+
+            <!-- Мета + просмотры -->
+            <div class="article-meta d-flex align-items-center justify-content-between flex-wrap gap-2">
+
+                <span th:text="#{${article.category.langKey}}">Категория</span>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <!-- просмотры -->
+                    <span class="meta-pill">
+            <i class="bi bi-eye"></i>
+            <span th:text="${article.viewCount}">0</span>
+        </span>
+
+                    <!-- избранное: только для auth -->
+                    <div sec:authorize="isAuthenticated()">
+
+                        <!-- Добавить -->
+                        <form th:if="${!isFavorite}"
+                              th:action="@{/{lang}/profile/favorite/add(lang=${lang})}"
+                              method="post" class="d-inline m-0">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="articleId" th:value="${article.articleId}">
+                            <input type="hidden" name="slug" th:value="${article.slug}">
+                            <button type="submit" class="meta-pill meta-pill-fav"
+                                    aria-label="Сохранить" th:title="#{cancel}">
+                                <i class="bi bi-bookmark-plus"></i>
+                            </button>
+                        </form>
+
+                        <!-- Убрать -->
+                        <form th:if="${isFavorite}"
+                              th:action="@{/{lang}/profile/favorite/delete(lang=${lang})}"
+                              method="post" class="d-inline m-0">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="articleId" th:value="${article.articleId}">
+                            <input type="hidden" name="slug" th:value="${article.slug}">
+                            <button type="submit" class="meta-pill meta-pill-fav active"
+                                    aria-label="Убрать из избранного" th:title="#{save}">
+                                <i class="bi bi-bookmark-check-fill"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Заголовок -->
+            <h1 th:text="${article.title}">Заголовок статьи</h1>
+
+            <!-- Обложка -->
+<!--            <img class="cover"-->
+<!--                 th:if="${article.coverName != null}"-->
+<!--                 th:src="@{/uploads/images/{name}(name=${article.coverName})}" alt="${article.alt}">-->
+
+            <div class="article-content" th:each="block : ${article.blocks}">
+                <th:block th:switch="${block.type.name()}">
+                    <div th:case="'TEXT'" th:utext="${block.content}"></div>
+                    <img th:case="'IMAGE'" th:src="@{/uploads/images/{name}(name=${block.content})}"
+                         th:attr="alt=${block.content}">
+                    <blockquote th:case="'QUOTE'" th:utext="${block.content}"></blockquote>
+                    <div th:case="*">Неизвестный блок: <span th:text="${block.type}"></span></div>
+                </th:block>
+            </div>
+
+            <!-- Поделиться -->
+            <div>
+                <div class="share-button" onclick="shareArticle()" th:text="#{share}"></div>
+
+            </div>
+
+            <div class="article-tags mt-4">
+                <h5 th:text="#{tags}"></h5>
+                <div class="tags-wrapper">
+                    <a th:each="tag : ${article.tags}"
+                       th:href="@{/{lang}/article/all(lang=${lang}, filterTag=${tag})}"
+                       th:text="${tag}"
+                       class="tag">
+                    </a>
+                </div>
+            </div>
+
+            <div id="comments" class="comments">
+                <h4 th:text="#{comments}">
+                    (<span th:text="${article.commentCount}"></span>)
+                </h4>
+
+                <div th:if="${article.commentsEnabled}">
+                    <div sec:authorize="isAuthenticated()">
+                        <form th:action="@{/comments/add}" method="post">
+                            <input type="hidden" name="articleId" th:value="${article.articleId}"/>
+
+                            <textarea id="commentText" name="text"
+                                      required
+                                      th:disabled="${#authorization.expr('isAnonymous()')}"
+                                      maxlength="3000"
+                                      th:placeholder="#{writeComment}"
+                                      style="width:100%; min-height:120px;"></textarea>
+                            <div class="text-muted mt-1">
+                                <span th:text="#{charactersLeft}">Осталось символов:</span>
+                                <span id="counter">3000</span>
+                            </div>
+
+                            <div class="mt-2" th:if="${#authorization.expr('isAnonymous()')}">
+                            <span class="text-muted">
+                                <a th:href="@{/login}" th:text="#{signInOrSignUpToComment}"></a>
+                            </span>
+                            </div>
+                            <button class="btn btn-primary mt-2"
+                                    th:disabled="${#authorization.expr('isAnonymous()')}" th:text="#{send}">
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <div sec:authorize="isAnonymous()"
+                         class="text-muted">
+                        <a th:href="@{/auth/login}" th:text="#{signInOrSignUpToComment}"></a>
+                    </div>
+                </div>
+
+                <div th:if="${!article.commentsEnabled}" class="text-muted"
+                     th:text="#{commentsForArticleAreDisabled}">
+                </div>
+                <div th:if="${!comments.isEmpty}" th:each="comment : ${comments}" class="comment">
+                    <img class="avatar" th:src="${comment.userAvatarFilename != null and !#strings.isEmpty(comment.userAvatarFilename)}
+              ? '/uploads/images/' + ${comment.userAvatarFilename}
+              : '/image/logo.png'">
+
+                    <div class="comment-content">
+                        <div class="name">
+                            <span th:text="${comment.userDisplayName}"></span>
+                            <span class="date" th:text="${#temporals.format(comment.createdAt, 'dd.MM.yyyy')}"></span>
+                        </div>
+                        <div class="text" th:text="${comment.text}"></div>
+
+                        <div class="meta">
+
+                            <form sec:authorize="hasRole('ADMIN')"
+                                  th:action="@{/ru/admin/comments/delete/{id}(id=${comment.id})}"
+                                  method="post"
+                                  style="display:inline;">
+                                <button class="btn btn-sm btn-danger" th:text="#{delete}"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <aside class="sidebar">
+
+            <div class="related-card">
+                <h4 class="related-title" th:text="#{relatedArticles}">Похожие статьи</h4>
+
+                <a class="related-item"
+                   th:each="art : ${relatedArticles}"
+                   th:href="@{/{lang}/article/{slug}(lang=${art.language.code}, slug=${art.slug})}">
+
+                    <div class="related-thumb">
+                        <img th:src="@{/uploads/images/{name}(name=${art.coverName})}"
+                             th:alt="${art.title}"
+                             th:style="'object-position:' + ${art.coverPosition}">
+                    </div>
+
+                    <div class="related-info">
+                        <div class="related-item-title"
+                             th:text="${art.title}">Заголовок</div>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </aside>
+        </div>
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+
+<script>
+    const ta = document.getElementById('commentText');
+    const counter = document.getElementById('counter');
+    const MAX_LEN = 3000;
+
+    function updateCounter() {
+        const remaining = MAX_LEN - ta.value.length;
+        counter.textContent = remaining;
+        counter.style.color = remaining <= 50 ? 'red' : '#555';
+    }
+
+    ta.addEventListener('input', updateCounter);
+    updateCounter();
+    // Поделиться через Web Share API, если доступно
+    function shareArticle() {
+        const title = document.querySelector('h1').innerText;
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                url: url
+            }).catch(console.error);
+        } else {
+            alert('Ваш браузер не поддерживает прямое "Поделиться". Скопируйте ссылку вручную: ' + url);
+        }
+    }
+
+
+</script>
+</body>
+</html>

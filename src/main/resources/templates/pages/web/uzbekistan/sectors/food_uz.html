@@ -1,0 +1,381 @@
+<!doctype html>
+<html th:with="lang=${#locale.language}">
+<head>
+    <title>O‘zbek milliy taomlari</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+
+    <style>
+        .text-card {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 22px;
+            border-radius: 20px;
+            transition: 0.3s ease;
+        }
+
+        .text-card:hover {
+            background: rgba(246,200,76,0.2);
+            transform: translateY(-4px);
+        }
+
+
+        .food-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s ease;
+            text-align: center;
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .food-card p {
+            margin: 0;
+            padding: 12px;
+            color: #fff;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .food-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .food-card:hover p {
+            color: #f6c84c;
+        }
+
+
+
+
+
+
+
+        .img-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .img-card span {
+            display: block;
+            padding: 14px 10px;
+            color: #fff;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .img-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .img-card:hover span {
+            color: #f6c84c;
+        }
+
+
+
+        .banner h2 {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        /*.carousel img {*/
+        /*    height: 380px;*/
+        /*    object-fit: cover;*/
+        /*}*/
+
+        /*@media (max-width: 768px) {*/
+        /*    .carousel img {*/
+        /*        height: 220px;*/
+        /*    }*/
+        /*}*/
+
+
+
+
+        .text-accent {
+            color: #f6c84c;
+            font-weight: 500;
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
+
+
+
+
+        .text-accent {
+            color: #f6c84c;
+            font-weight: 500;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+
+<main class="food-page pt-5">
+
+    <!-- SECTION 1 -->
+    <section class="section">
+        <div class="container text-center">
+            <h1 class="display-5 fw-semibold reveal">
+                O‘zbek <span class="text-accent">milliy taomlari</span>
+            </h1>
+        </div>
+    </section>
+
+    <section class="section mb-5">
+        <div class="container">
+
+            <h2 class="section-title text-center mt-5 reveal"><span>Osh (Palov)</span></h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <div class="col-lg-6 reveal">
+                    <div class="ratio ratio-4x3 rounded-4 overflow-hidden">
+                        <img src="/image/food/food_osh.jpg"
+                             class="w-100 h-100 object-fit-cover"
+                             alt="Osh">
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="d-flex flex-column h-100 gap-3 reveal">
+
+                        <div class="text-card">
+                            <span class="text-accent">Osh</span> — O‘zbekistonning eng mashhur va eng e’zozli milliy taomidir.
+                        </div>
+
+                        <div class="text-card">
+                            O‘zbekistonda oshpazlik mahorati
+                            <span class="text-accent">10–15 avlod davomida</span>
+                            nasldan-naslga o‘tib kelayotgan butun boshli sulolalar mavjud.
+                        </div>
+
+                        <div class="text-card">
+                            Dunyoning eng katta oshini tayyorlash bo‘yicha rekord ham O‘zbekistonga tegishli
+                            va u <span class="text-accent">Ginnes rekordlar kitobiga</span> kiritilgan.
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 mt-5 reveal">
+                <div class="text-card text-center">
+                    Osh o‘zbek xalqining madaniyatida alohida o‘rin tutadi.
+                    U hurmat, sharaf va mehmondo‘stlik ramzi hisoblanadi.
+
+                    To‘y kuni kuyov va kelinning otalari
+                    tanish-bilish erkaklarni 100–200 kishilik dasturxonga taklif qilib,
+                    osh bilan siylashi an’ana hisoblanadi.
+
+                    Kuyov kelin uyiga kelganda ham,
+                    uni va uning do‘stlarini osh bilan kutib olish odat tusiga kirgan.
+
+                    Agar uyga hurmatli mehmon kelsa,
+                    eng munosib taom — osh tortiladi.
+
+                    Hatto kimdir vafot etsa ham,
+                    imkoniyat bo‘lsa 100–200 kishilik ehson dasturxoni yozilib,
+                    marhum xotirasiga osh tarqatiladi.
+
+                    Shuningdek, xalq orasida quvonchli voqea yuz bersa,
+                    ko‘pincha osh berib nishonlash odat tusiga kirgan.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section mb-5">
+        <div class="container">
+            <h2 class="section-title text-center reveal">
+                <span>Mashhur taomlar</span>
+            </h2>
+
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_shashlik.jpg">
+                        <p>Shashlik</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_kazanKebab.jpg">
+                        <p>Qozon kabob</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_norin.jpg">
+                        <p>Norin</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_manti.jpg">
+                        <p>Manti</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_xonim.jpg">
+                        <p>Xonim</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section mb-5">
+        <div class="container">
+            <h2 class="section-title text-center reveal">
+                <span>Tandir</span>
+            </h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <div class="col-lg-6 reveal">
+                    <img src="/image/food/food_tandir.jpg"
+                         class="img-fluid w-100 h-100 rounded-4 object-fit-cover"
+                         alt="Tandir">
+                </div>
+
+                <div class="col-lg-6 reveal">
+                    <div class="d-flex flex-column h-100 gap-3">
+
+                        <div class="text-card">
+                            Ko‘plab o‘zbek taomlarini tayyorlashda
+                            <span class="text-accent">tandir</span>
+                            asosiy an’anaviy pech hisoblanadi.
+                        </div>
+
+                        <div class="text-card">
+                            Tandir deyarli har bir hududda —
+                            uylar, nonvoyxonalar va restoranlarda mavjud.
+                        </div>
+
+                        <div class="text-card">
+                            Unda asosan <span class="text-accent">non va patirlar</span> pishiriladi.
+                            Har bir viloyatning o‘ziga xos non turi bor.
+                        </div>
+
+                        <div class="text-card">
+                            Shuningdek, tandirda
+                            <span class="text-accent">somsa</span> va
+                            <span class="text-accent">tandir go‘sht</span>
+                            ham tayyorlanadi.
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section class="section banner mb-5">
+        <div class="container">
+            <div class="banner-text text-center mb-4 reveal">
+                <h2>
+                    Bahor — sehrli fasl bo‘lib,
+                    o‘zbek oshxonasi an’anaviy
+                    <span class="text-accent">bahorgi taomlar</span>
+                    bilan yanada boyiydi
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION CHOY -->
+    <section class="section mb-5">
+        <div class="container">
+
+            <h2 class="section-title text-center mb-5 reveal">
+                <span>Choy</span>
+            </h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <div class="col-lg-6 reveal">
+                    <img src="/image/food/food_choy.jpg"
+                         class="img-fluid rounded-4 w-100 h-100 object-fit-cover">
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row g-3 h-100">
+
+                        <div class="col-12 reveal">
+                            <div class="text-card">
+                                Choy o‘zbek madaniyatida alohida o‘rin tutadi
+                                va mehmondo‘stlik an’analari bilan chambarchas bog‘liq.
+                            </div>
+                        </div>
+
+                        <div class="col-12 reveal">
+                            <div class="text-card">
+                                Mehmon kelganda avvalo
+                                <span class="text-accent">non va choy</span>
+                                tortiladi — bu hurmat belgisi hisoblanadi.
+                            </div>
+                        </div>
+
+                        <div class="col-12 reveal">
+                            <div class="text-card">
+                                Choy piyolaga to‘liq to‘ldirilmay quyiladi —
+                                bu ham mehmonni hurmat qilish ifodasidir.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:src="@{/js/components/swapper.js}"></script>
+<script th:src="@{/js/components/dynamicScroll.js}"></script>
+</body>
+</html>

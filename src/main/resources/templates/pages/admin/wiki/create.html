@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Создать профиль</title>
+
+    <th:block th:insert="fragments/assets/style_links :: css"/>
+
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}"/>
+
+    <style>
+        /* page cosmetics */
+        .vd-adminShell{ max-width: 1100px; }
+        .vd-cardGlass{
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 18px;
+        }
+        .vd-help{ font-size:.85rem; opacity:.85; }
+        .vd-preview{
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.04);
+        }
+        .vd-stickyActions{
+            position: sticky;
+            top: 12px;
+        }
+        .vd-fieldError{ font-size:.85rem; }
+        .vd-req::after{ content:" *"; color:#ff5a5a; font-weight:700; }
+
+        .form-control, .form-select{
+            background: rgba(0,0,0,.22);
+            border: 1px solid rgba(255,255,255,.18);
+            color:#fff;
+        }
+        .form-control:focus, .form-select:focus{
+            border-color: rgba(13,110,253,.65);
+            box-shadow: 0 0 0 .25rem rgba(13,110,253,.22);
+            background: rgba(0,0,0,.22);
+            color:#fff;
+        }
+        textarea.form-control{ min-height: 160px; }
+        code{ color: inherit; }
+
+        main {
+            margin-top: 80px;
+        }
+        input[placeholder]::placeholder,
+        textarea[placeholder]::placeholder {
+            color: #fff !important;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+
+<main class="container py-4">
+    <div th:replace="fragments/result :: result(is_done, message)"></div>
+
+    <div class="vd-adminShell mx-auto">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+            <div>
+                <h1 class="fw-bold mb-1">Создать профиль</h1>
+                <div class="vd-help">Заполни поля и нажми “Сохранить”</div>
+            </div>
+
+            <a class="btn btn-outline-light"
+               th:href="@{/ru/uzbekistan/persons}">
+                <i class="bi bi-arrow-left"></i> Назад
+            </a>
+        </div>
+
+        <form class="vd-cardGlass p-3 p-md-4"
+              th:action="@{/ru/admin/wiki/persons/create}"
+              method="post"
+              th:object="${dto}"
+              enctype="multipart/form-data">
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="row g-4">
+                <!-- LEFT: main fields -->
+                <div class="col-lg-8">
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Slug</label>
+                            <input class="form-control" th:field="*{slug}" required autocomplete="off"
+                                   maxlength="255"
+                                   pattern="[a-z0-9-]+"
+                                   title="Только латиница, цифры и дефис"
+                                   placeholder="shavkat-mirziyoyev"/>
+                            <div class="vd-help mt-1">
+                                Формат: <code>a-z</code>, <code>0-9</code> и дефисы. Пример: <code>alisher-uzakov</code>
+                            </div>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('slug')}" th:errors="*{slug}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Alt картинки</label>
+                            <input class="form-control" th:field="*{alt}" required placeholder="alt text"/>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('alt')}" th:errors="*{alt}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Имя (RU)</label>
+                            <input class="form-control" th:field="*{ruName}" required/>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('ruName')}" th:errors="*{ruName}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Имя (UZ)</label>
+                            <input class="form-control" th:field="*{uzName}" required/>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('uzName')}" th:errors="*{uzName}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Дата рождения</label>
+                            <input class="form-control" th:field="*{birthDate}" type="date" required/>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Дата смерти</label>
+                            <input class="form-control" th:field="*{deathDate}" type="date"/>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('deathDate')}" th:errors="*{deathDate}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Место рождения</label>
+                            <select class="form-select" th:field="*{birthPlace}" required>
+                                <option value="" disabled th:selected="${dto.birthPlace == null}">— Выберите —</option>
+                                <option th:each="p : ${places}" th:value="${p}" th:text="#{${p.code}}"></option>
+                            </select>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('birthPlace')}" th:errors="*{birthPlace}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label vd-req">Тип личности</label>
+                            <select class="form-select" th:field="*{type}" id="personType" required>
+                                <option value="" disabled th:selected="${dto.type == null}">— Выберите —</option>
+                                <option th:each="t : ${types}" th:value="${t}" th:text="#{${t.code}}"></option>
+                            </select>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></div>
+                            <div class="vd-help mt-1">Спорт-поля ниже заполняй только если тип “Спортсмен”.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Внешняя ссылка</label>
+                            <input class="form-control" th:field="*{externalUrl}"
+                                   placeholder="https://..."
+                                   pattern="https?://.+"/>
+                            <div class="vd-help mt-1">Если указываешь — должна начинаться с http:// или https://</div>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('externalUrl')}" th:errors="*{externalUrl}"></div>
+                        </div>
+
+                        <!-- Sport fields (toggle by type=ATHLETE) -->
+                        <div class="col-md-6" id="sportTypeWrap">
+                            <label class="form-label">Вид спорта</label>
+                            <select class="form-select" th:field="*{sportType}" id="sportType">
+                                <option value="">—</option>
+                                <option th:each="sp : ${sportTypes}" th:value="${sp}" th:text="#{${sp.code}}"></option>
+                            </select>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('sportType')}" th:errors="*{sportType}"></div>
+                        </div>
+
+                        <div class="col-md-6" id="sportStatusWrap">
+                            <label class="form-label">Карьера</label>
+                            <select class="form-select" th:field="*{sportStatus}" id="sportStatus">
+                                <option value="">—</option>
+                                <option th:each="st : ${sportStatuses}" th:value="${st}" th:text="#{${st.code}}"></option>
+                            </select>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('sportStatus')}" th:errors="*{sportStatus}"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Описание (RU)</label>
+                            <textarea class="form-control" th:field="*{ruDescription}" rows="6"
+                                      placeholder="Короткое описание..."></textarea>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('ruDescription')}" th:errors="*{ruDescription}"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Описание (UZ)</label>
+                            <textarea class="form-control" th:field="*{uzDescription}" rows="6"
+                                      placeholder="Qisqa tavsif..."></textarea>
+                            <div class="text-danger vd-fieldError mt-1"
+                                 th:if="${#fields.hasErrors('uzDescription')}" th:errors="*{uzDescription}"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT: image + actions -->
+                <div class="col-lg-4">
+                    <div class="vd-stickyActions">
+                        <div class="p-3 rounded-4" style="background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.14);">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="fw-semibold">Изображение</div>
+                                <span class="badge text-bg-secondary">личности</span>
+                            </div>
+
+                            <!-- placeholder preview -->
+                            <img class="vd-preview mb-3" id="imgPreview"
+                                 th:src="@{/image/user.png}"
+                                 alt="Preview"/>
+
+                            <div class="mb-2">
+                                <label class="form-label vd-req">Файл</label>
+                                <input class="form-control" type="file" th:field="*{file}" accept="image/*" id="fileInput" required/>
+                                <div class="text-danger vd-fieldError mt-1"
+                                     th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></div>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-3">
+                                <button class="btn btn-primary btn-lg" type="submit">
+                                    <i class="bi bi-save"></i> Сохранить
+                                </button>
+
+                                <button class="btn btn-outline-light" type="reset" id="resetBtn">
+                                    Сбросить
+                                </button>
+                            </div>
+
+                            <hr class="border-light opacity-25 my-3"/>
+
+                            <div class="vd-help">
+                                Подсказка: если тип не “Спортсмен”, поля “Вид спорта/Карьера” будут скрыты и очищены.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+
+<script>
+    // Toggle sport fields by type = ATHLETE
+    (function () {
+        const typeSelect = document.getElementById('personType');
+        const sportTypeWrap = document.getElementById('sportTypeWrap');
+        const sportStatusWrap = document.getElementById('sportStatusWrap');
+        const sportType = document.getElementById('sportType');
+        const sportStatus = document.getElementById('sportStatus');
+
+        function isAthlete() {
+            return (typeSelect?.value || '').toUpperCase() === 'ATHLETE';
+        }
+
+        function sync() {
+            const show = isAthlete();
+            if (sportTypeWrap) sportTypeWrap.style.display = show ? '' : 'none';
+            if (sportStatusWrap) sportStatusWrap.style.display = show ? '' : 'none';
+            if (!show) {
+                if (sportType) sportType.value = '';
+                if (sportStatus) sportStatus.value = '';
+            }
+        }
+
+        if (typeSelect) {
+            typeSelect.addEventListener('change', sync);
+            sync(); // initial
+        }
+    })();
+
+    // Preview chosen image (UX)
+    (function () {
+        const input = document.getElementById('fileInput');
+        const img = document.getElementById('imgPreview');
+        const resetBtn = document.getElementById('resetBtn');
+        if (!input || !img) return;
+
+        const originalSrc = img.src;
+
+        input.addEventListener('change', () => {
+            const f = input.files && input.files[0];
+            if (!f) return;
+            img.src = URL.createObjectURL(f);
+        });
+
+        // reset preview on reset
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                img.src = originalSrc;
+            });
+        }
+    })();
+</script>
+</body>
+</html>

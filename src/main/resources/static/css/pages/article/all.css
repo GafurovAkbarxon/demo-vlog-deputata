@@ -1,0 +1,297 @@
+body{
+    padding-top: 60px;
+}
+.article-card {
+    position: relative;
+    height: 320px;
+    width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+@media (max-width: 768px) {
+    .article-card {
+        height: 260px;       /* mobile */
+    }
+}
+
+
+.article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.35);
+    outline: 2px solid rgba(246,200,76,.8);
+}
+
+/* КАРТИНКА — 100% */
+.article-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ЗАТЕМНЕНИЕ СНИЗУ */
+.article-overlay {
+    background: linear-gradient(
+            to top,
+            rgba(0,0,0,.65) 30%,
+            rgba(0,0,0,.25) 55%,
+            transparent 75%
+    );
+}
+
+
+.article-card:hover .article-overlay {
+    background: linear-gradient(
+            to top,
+            rgba(0,0,0,.70) 30%,
+            rgba(0,0,0,.25) 55%,
+            transparent 75%
+    );
+}
+
+/* ЗАГОЛОВОК */
+.article-title {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+    line-height: 1.4;
+
+    z-index: 2;
+    transition: color .3s ease, text-decoration .3s ease, text-shadow .3s ease;
+}
+
+.article-card:hover .article-title {
+    color: #f6c84c;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+
+    /* белая обводка */
+    text-shadow:
+            -1px -1px 0 #fff,
+            1px -1px 0 #fff,
+            -1px  1px 0 #fff,
+            1px  1px 0 #fff;
+}
+
+/* КНОПКИ */
+.article-actions {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+}
+
+.article-actions a,
+.article-actions button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.4);
+
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    font-size: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.btn-edit:hover {
+    background: #0d6efd;   /* синий */
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background: #dc3545;   /* красный */
+    color: #fff;
+}
+
+
+
+
+
+
+
+
+/* ===== ФИЛЬТР КАРТОЧКА ===== */
+.filters-card {
+    backdrop-filter: blur(14px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 8px 28px rgba(2,6,23,0.25);
+}
+
+/* ===== ФОРМА ===== */
+.filters-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+/* ===== ОБЩИЙ БЛОК ===== */
+.filter-group {
+    flex: 1;
+    min-width: 160px;
+}
+
+/* ===== ПОИСК С ИКОНКОЙ ===== */
+.search-group {
+    position: relative;
+    flex: 2;
+}
+
+.search-group i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+}
+
+.search-group input {
+    padding-left: 36px;
+}
+
+/* ===== INPUTS ===== */
+.form-control, .form-select {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.06);
+    color: white;
+}
+
+.form-control::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+/* ===== КНОПКА ===== */
+.filter-btn-main {
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    transition: transform .18s ease, box-shadow .18s;
+}
+
+.filter-btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+}
+
+/* ===== МОБИЛКА ===== */
+@media (max-width: 768px) {
+    .filters-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-btn-main {
+        width: 100%;
+    }
+}
+
+
+
+
+/* Тег-инпут */
+.tag-group {
+    position: relative;
+}
+
+.tag-group i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bbb;
+}
+
+.tag-group input {
+    padding-left: 34px;
+}
+
+
+
+
+
+
+
+/* ВОТ ЭТО ГЛАВНОЕ */
+.form-select option {
+    color: black;
+}
+
+
+
+
+
+.translation-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 4px;
+    z-index: 4;
+}
+
+.lang-btn {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.4);
+    backdrop-filter: blur(6px);
+    transition: all .2s ease;
+}
+
+/* Есть перевод */
+.lang-active {
+    background: #0d6efd;
+    color: white;
+}
+
+.lang-active:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+}
+
+/* Нет перевода */
+.lang-missing {
+    background: rgba(255,255,255,.15);
+    color: #ddd;
+}
+
+.lang-missing:hover {
+    background: #ffc107;
+    color: black;
+}
+
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+

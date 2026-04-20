@@ -1,0 +1,40 @@
+:root {
+    --bg-main: linear-gradient(90deg, #1b2c55,#3d85a9,#63cac8,#b8edff);
+    --accent:#f6c84c;
+}
+body{
+    background: var(--bg-main);
+    color:#fff;
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+/* ===== Scroll a+nimation ===== */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+html, body {
+    height: 100%;
+}
+main {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
+    margin-top: auto;
+
+}

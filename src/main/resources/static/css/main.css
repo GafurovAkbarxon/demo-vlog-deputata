@@ -1,0 +1,10 @@
+/*основной стиль*/
+html, body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+        'Segoe UI', Arial, sans-serif;                                   /*шрифт текста*/
+    font-size: 16px;                                                     /*размер текста*/
+    line-height: 1.6;                                                    /*высота строк*/
+    color: #E6EAF0;                                                      /*цвет текста*/
+    background: #121521;
+
+}

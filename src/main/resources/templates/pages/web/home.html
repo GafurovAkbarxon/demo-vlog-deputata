@@ -1,0 +1,454 @@
+<!doctype html>
+<html th:with="lang=${#locale.language}">
+<head>
+    <title>Vlog Deputata</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/home.css}" />
+<!--    <link rel="preload" as="image" th:href="@{/image/t_nestOne.png}" />-->
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+<main>
+
+
+    <section class="container-fluid g-0">
+        <div class="row g-0">
+            <div id="app" class="col-12 g-0">
+                <canvas id="canvas"></canvas>
+                <h1 id="magicText" th:text="#{welcome}" >Welcome to Vlog Deputata</h1>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="liquid-divider">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path
+                    d="M0,40 C240,100 480,0 720,30 960,60 1200,100 1440,40 L1440,0 L0,0 Z"
+                    fill="#3d85a9">
+            </path>
+        </svg>
+    </div>
+
+
+    <section th:if="${articles.size() >= 3}" class="container-fluid">
+        <div class="swiper-title-wrapper">
+            <a th:href="@{/{lang}/article/all(lang=${lang})}" th:text="#{allArticles}"  class="swiper-title-link">
+               Все статьи
+            </a>
+        </div>
+
+        <div class="swiper myCoverflow">
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide"
+                     th:each="article : ${articles}">
+
+
+                    <div class="article-card">
+
+                        <a th:href="@{/{lang}/article/{slug}(lang=${lang}, slug=${article.slug})}"
+                           class="article-link">
+
+                            <img class="article-cover"
+                                 th:src="@{/uploads/images/{name}(name=${article.coverName})}"
+                                 th:style="'object-fit: cover; object-position: ' + ${article.coverPosition} + ';'"
+                                 th:alt="${article.altCover}">
+
+                            <div class="article-overlay"></div>
+
+                            <h5 class="article-title"
+                                th:text="${article.title}">
+                                Заголовок
+                            </h5>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+<footer th:replace="fragments/footer ::footer"></footer>
+
+
+
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:src="@{/js/components/swapper.js}"></script>
+
+
+<!--<script type="module">-->
+<!--// liquid-->
+<!--    import LiquidBackground-->
+<!--        from 'https://cdn.jsdelivr.net/npm/threejs-components@0.0.22/build/backgrounds/liquid1.min.js'-->
+<!--    const app = LiquidBackground(document.getElementById('canvas'))-->
+
+<!--    app.loadImage('/image/t_nestOne.png')// какая картинка под liquid-->
+<!--    app.liquidPlane.material.metalness = 0.75-->
+<!--    app.liquidPlane.material.roughness = 0.25-->
+<!--    app.liquidPlane.uniforms.displacementScale.value = 5-->
+<!--    app.setRain(false)-->
+
+<!--// liquid text-->
+<!--    const text = document.getElementById("magicText");-->
+<!--    let lastTap = 0;-->
+
+<!--    /* ПК — двойной клик */-->
+<!--    document.addEventListener("dblclick", () => {-->
+<!--        text.classList.toggle("visible");-->
+<!--    });-->
+
+<!--    /* Телефон — double tap */-->
+<!--    document.addEventListener("touchend", () => {-->
+<!--        const now = Date.now();-->
+<!--        if (now - lastTap < 300) {-->
+<!--            text.classList.toggle("visible");-->
+<!--        }-->
+<!--        lastTap = now;-->
+<!--    });-->
+
+
+
+<!--</script>-->
+<script type="module">
+    const appEl = document.getElementById('app');
+    const canvas = document.getElementById('canvas');
+    const text = document.getElementById('magicText');
+
+    let lastTextTapTime = 0;
+
+    function toggleMagicText() {
+        text.classList.toggle('visible');
+    }
+
+    // ПК — двойной клик по самому тексту
+    text.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        toggleMagicText();
+    });
+
+    // Мобильный — двойной тап по самому тексту
+    text.addEventListener('touchend', (e) => {
+        e.preventDefault();
+
+        const now = Date.now();
+        const dt = now - lastTextTapTime;
+
+        if (dt > 0 && dt < 320) {
+            toggleMagicText();
+            lastTextTapTime = 0;
+            return;
+        }
+
+        lastTextTapTime = now;
+    }, { passive: false });
+
+    function detectLiquidTier() {
+        const testCanvas = document.createElement('canvas');
+        const gl =
+            testCanvas.getContext('webgl2', { antialias: false, alpha: false }) ||
+            testCanvas.getContext('webgl', { antialias: false, alpha: false }) ||
+            testCanvas.getContext('experimental-webgl', { antialias: false, alpha: false });
+
+        if (!gl) {
+            return {
+                tier: 'weak',
+                reason: 'No WebGL'
+            };
+        }
+
+        const isWebGL2 =
+            typeof WebGL2RenderingContext !== 'undefined' &&
+            gl instanceof WebGL2RenderingContext;
+
+        const hasFloatLinear = !!gl.getExtension('OES_texture_float_linear');
+        const hasHalfFloatLinear = !!gl.getExtension('OES_texture_half_float_linear');
+        const hasColorBufferFloat =
+            !!gl.getExtension('WEBGL_color_buffer_float') ||
+            !!gl.getExtension('EXT_color_buffer_float') ||
+            !!gl.getExtension('EXT_color_buffer_half_float');
+
+        const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        const dpr = Math.min(window.devicePixelRatio || 1, 3);
+        const mobile = window.matchMedia('(max-width: 768px)').matches;
+
+        // ORIGINAL liquid1 разрешаем только когда есть именно float linear support
+        if (
+            isWebGL2 &&
+            hasFloatLinear &&
+            hasColorBufferFloat &&
+            maxTextureSize >= 4096 &&
+            (!mobile || dpr <= 3)
+        ) {
+            return {
+                tier: 'strong',
+                reason: 'Original liquid1 allowed'
+            };
+        }
+
+        // Всё остальное: не original liquid1, а fallback
+        if (
+            (isWebGL2 || hasHalfFloatLinear || maxTextureSize >= 2048)
+        ) {
+            return {
+                tier: 'medium',
+                reason: 'Fallback medium'
+            };
+        }
+
+        return {
+            tier: 'weak',
+            reason: 'Fallback weak'
+        };
+    }
+
+    const liquidTierInfo = detectLiquidTier();
+    console.log('Liquid tier:', liquidTierInfo.tier, '|', liquidTierInfo.reason);
+
+    async function startOriginalLiquid() {
+        const { default: LiquidBackground } = await import(
+            'https://cdn.jsdelivr.net/npm/threejs-components@0.0.30/build/backgrounds/liquid1.min.js'
+            );
+
+        const app = LiquidBackground(canvas);
+        app.loadImage('/image/t_nestOne.png');
+        app.liquidPlane.material.metalness = 0.75;
+        app.liquidPlane.material.roughness = 0.25;
+        app.liquidPlane.uniforms.displacementScale.value = 5;
+        app.setRain(false);
+    }
+
+    async function startFallbackLiquid(options = {}) {
+        const THREE = await import(
+            'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js'
+            );
+
+        const isMedium = options.mode === 'medium';
+
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: false,
+            alpha: false,
+            powerPreference: 'high-performance'
+        });
+        renderer.toneMapping = THREE.NoToneMapping;
+        renderer.setPixelRatio(
+            isMedium
+                ? Math.min(window.devicePixelRatio || 1, 1.75)
+                : Math.min(window.devicePixelRatio || 1, 1.35)
+        );
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const geometry = new THREE.PlaneGeometry(2, 2);
+
+        const uniforms = {
+            uTexture: { value: null },
+            uTime: { value: 0 },
+            uPointer: { value: new THREE.Vector2(0.5, 0.5) },
+            uTargetPointer: { value: new THREE.Vector2(0.5, 0.5) },
+            uVelocity: { value: new THREE.Vector2(0.0, 0.0) },
+            uResolution: { value: new THREE.Vector2(1, 1) },
+            uTextureResolution: { value: new THREE.Vector2(1, 1) },
+            uStrength: { value: 0.0 },
+            uWaveAmp: { value: isMedium ? 0.022 : 0.014 },
+            uFlowAmp: { value: isMedium ? 0.010 : 0.007 },
+            uRippleFreq: { value: isMedium ? 24.0 : 20.0 },
+            uRippleSpeed: { value: isMedium ? 3.0 : 2.5 },
+            uDecay: { value: isMedium ? 10.5 : 12.0 }
+        };
+
+        const material = new THREE.ShaderMaterial({
+            uniforms,
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                precision highp float;
+
+                varying vec2 vUv;
+
+                uniform sampler2D uTexture;
+                uniform float uTime;
+                uniform vec2 uPointer;
+                uniform vec2 uVelocity;
+                uniform vec2 uResolution;
+                uniform vec2 uTextureResolution;
+                uniform float uStrength;
+                uniform float uWaveAmp;
+                uniform float uFlowAmp;
+                uniform float uRippleFreq;
+                uniform float uRippleSpeed;
+                uniform float uDecay;
+
+                vec2 coverUv(vec2 uv, vec2 canvasSize, vec2 imageSize) {
+                    float canvasRatio = canvasSize.x / canvasSize.y;
+                    float imageRatio = imageSize.x / imageSize.y;
+                    vec2 newUv = uv;
+
+                    if (canvasRatio > imageRatio) {
+                        float scale = imageRatio / canvasRatio;
+                        newUv.y = (uv.y - 0.5) * scale + 0.5;
+                    } else {
+                        float scale = canvasRatio / imageRatio;
+                        newUv.x = (uv.x - 0.5) * scale + 0.5;
+                    }
+
+                    return newUv;
+                }
+
+                void main() {
+                    vec2 uv = coverUv(vUv, uResolution, uTextureResolution);
+
+                    vec2 delta = uv - uPointer;
+                    float dist = length(delta);
+                    vec2 dir = normalize(delta + vec2(0.00001));
+
+                    float ripple =
+                        sin(dist * uRippleFreq - uTime * uRippleSpeed) *
+                        exp(-dist * uDecay) *
+                        uStrength;
+
+                    vec2 drag = uVelocity * uFlowAmp;
+                    vec2 offset = dir * ripple * uWaveAmp + drag;
+
+                    float waveX = sin(uv.y * 10.0 + uTime * 0.7) * 0.0035;
+                    float waveY = cos(uv.x * 8.0 - uTime * 0.6) * 0.0035;
+
+                    vec2 finalUv = clamp(
+                        uv + offset + vec2(waveX, waveY),
+                        vec2(0.001),
+                        vec2(0.999)
+                    );
+
+                    vec4 color = texture2D(uTexture, finalUv);
+
+
+
+                    gl_FragColor = color;
+                }
+            `
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        const loader = new THREE.TextureLoader();
+        loader.load('/image/t_nestOne.png', (texture) => {
+            texture.wrapS = THREE.ClampToEdgeWrapping;
+            texture.wrapT = THREE.ClampToEdgeWrapping;
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            texture.generateMipmaps = false;
+
+
+            uniforms.uTexture.value = texture;
+            uniforms.uTextureResolution.value.set(
+                texture.image.width,
+                texture.image.height
+            );
+
+            resize();
+            animate();
+        });
+
+        function resize() {
+            const width = appEl.clientWidth;
+            const height = appEl.clientHeight;
+            renderer.setSize(width, height, false);
+            uniforms.uResolution.value.set(width, height);
+        }
+
+        window.addEventListener('resize', resize);
+
+        function updatePointer(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (clientX - rect.left) / rect.width;
+            const y = 1 - (clientY - rect.top) / rect.height;
+
+            uniforms.uTargetPointer.value.set(
+                THREE.MathUtils.clamp(x, 0, 1),
+                THREE.MathUtils.clamp(y, 0, 1)
+            );
+
+            uniforms.uStrength.value = 1.0;
+        }
+
+        canvas.addEventListener('pointermove', (e) => {
+            updatePointer(e.clientX, e.clientY);
+        });
+
+        canvas.addEventListener('pointerleave', () => {
+            uniforms.uStrength.value = 0.0;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            if (!touch) return;
+            updatePointer(touch.clientX, touch.clientY);
+        }, { passive: true });
+
+        canvas.addEventListener('touchend', () => {
+            uniforms.uStrength.value = 0.0;
+        }, { passive: true });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const t = clock.getElapsedTime();
+
+            const prevX = uniforms.uPointer.value.x;
+            const prevY = uniforms.uPointer.value.y;
+
+            uniforms.uPointer.value.lerp(
+                uniforms.uTargetPointer.value,
+                isMedium ? 0.11 : 0.08
+            );
+
+            const vx = uniforms.uPointer.value.x - prevX;
+            const vy = uniforms.uPointer.value.y - prevY;
+
+            uniforms.uVelocity.value.lerp(
+                new THREE.Vector2(vx, vy),
+                isMedium ? 0.20 : 0.14
+            );
+
+            uniforms.uStrength.value = THREE.MathUtils.lerp(
+                uniforms.uStrength.value,
+                0.0,
+                isMedium ? 0.030 : 0.045
+            );
+
+            uniforms.uTime.value = t;
+
+            renderer.render(scene, camera);
+        }
+    }
+
+    if (liquidTierInfo.tier === 'strong') {
+        startOriginalLiquid();
+    } else if (liquidTierInfo.tier === 'medium') {
+        startFallbackLiquid({ mode: 'medium' });
+    } else {
+        startFallbackLiquid({ mode: 'weak' });
+    }
+</script>
+</body>
+</html>

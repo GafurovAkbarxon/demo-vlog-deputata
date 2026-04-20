@@ -1,0 +1,119 @@
+/*стиль секции карта*/
+
+/*контейнер карты*/
+.uz-map {
+    display: block;
+    width: 100%;
+    max-width: 800px;   /* чтобы не раздувалась на десктопе */
+    height: auto;
+}
+@media (max-width: 480px) {
+    .uz-map {
+        max-width: 100%;
+    }
+}
+
+
+
+.uzbekistan-map {
+    display: flex;
+    justify-content: center; /* центр по горизонтали */
+    width: 100%;
+}
+@media (max-width: 768px) {
+    .uzbekistan-map {
+        padding-inline: 16px;
+        /*box-sizing: border-box;*/
+    }
+    .uz-map {
+        width: 100%;
+        height: auto;
+    }
+}
+/*стили областей карты*/
+.uz-map path {
+    fill: #018aff;              /*цвет областей*/
+    stroke: #ffffff;            /*цвет обводки областей*/
+    stroke-width: 1.5;          /*толщина обводки областей*/
+    transition: all 0.3s ease;  /*плавность при hover*/
+    cursor: pointer;            /*тип курсора перед нажатием*/
+}
+/*стили областей карты при наведении*/
+.uz-map path:hover {
+    fill: #f6c84c;                                     /*менять цвет на этот*/
+    filter: drop-shadow(0 0 12px rgba(246,200,76,0.7));/**/
+}
+/*==================================================*/
+/*стиль секции карточки сфер*/
+
+.hub{
+    padding:100px 8%;
+    text-align:center;
+}
+.hub h2{
+    font-size:44px;
+    margin-bottom:40px;
+}
+.hub h2 span{
+    color:#f6c84c;
+}
+/* GRID */
+.hub-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:30px;
+}
+
+/* CARD BASE */
+.hub-card{
+    position:relative;
+    padding:34px 28px;
+    border-radius:28px;
+    text-align:left;
+    text-decoration:none;
+    color:#fff;
+    background:rgba(255,255,255,0.14);
+    backdrop-filter:blur(6px);
+    transition:0.45s ease;
+    overflow:hidden;
+}
+
+.hub-card h3{
+    font-size:26px;
+    margin-bottom:8px;
+}
+.hub-card p{
+    font-size:14px;
+    opacity:0.85;
+}
+
+/* HOVER EFFECT */
+.hub-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg,transparent,rgba(246,200,76,0.25));
+    opacity:0;
+    transition:0.4s;
+}
+.hub-card:hover::after{
+    opacity:1;
+}
+.hub-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 25px 50px rgba(0,0,0,.4);
+}
+/* COLOR ACCENTS */
+.culture{border-left:5px solid #f6c84c;}
+.sport{border-left:5px solid #63cac8;}
+.economy{border-left:5px solid #3d85a9;}
+.army{border-left:5px solid #c94b4b;}
+.traditions{border-left:5px solid #8fd18f;}
+.food{border-left:5px solid #f09c42;}
+/* ADAPTIVE */
+@media(max-width:600px){
+    .hub h2{font-size:34px;}
+    .hub-card{padding:26px;}
+}
+/*========================================================*/
+

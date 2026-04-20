@@ -1,0 +1,583 @@
+<!doctype html>
+<html th:with="lang=${#locale.language}">
+<head>
+    <title>Tashkent</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+<!--    <link rel="stylesheet" th:href="@{/css/pages/tashkent.css}" />-->
+
+    <style>
+        .text-card {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 22px;
+            border-radius: 20px;
+            transition: 0.3s ease;
+        }
+
+        .text-card:hover {
+            background: rgba(246,200,76,0.2);
+            transform: translateY(-4px);
+        }
+
+
+        .food-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s ease;
+            text-align: center;
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .food-card p {
+            margin: 0;
+            padding: 12px;
+            color: #fff;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .food-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .food-card:hover p {
+            color: #f6c84c;
+        }
+
+
+
+
+
+
+
+        .img-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .img-card span {
+            display: block;
+            padding: 14px 10px;
+            color: #fff;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .img-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .img-card:hover span {
+            color: #f6c84c;
+        }
+
+
+
+        .banner h2 {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        /*.carousel img {*/
+        /*    height: 380px;*/
+        /*    object-fit: cover;*/
+        /*}*/
+
+        /*@media (max-width: 768px) {*/
+        /*    .carousel img {*/
+        /*        height: 220px;*/
+        /*    }*/
+        /*}*/
+
+
+
+
+                .text-accent {
+            color: #f6c84c;
+            font-weight: 500;
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
+
+
+
+
+        .text-accent {
+            color: #f6c84c;
+            font-weight: 500;
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+
+<main class="food-page pt-5">
+    <section class="section">
+        <div class="container text-center">
+            <h1 class="display-5 fw-semibold reveal">
+                Узбекская <span class="text-accent">кухня</span>
+            </h1>
+        </div>
+    </section>
+    <section class="section mb-5">
+        <div class="container">
+
+            <h2 class="section-title text-center mt-5 reveal"><span>Плов</span></h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <!-- Картинка -->
+                <div class="col-lg-6 reveal">
+                    <div class="ratio ratio-4x3 rounded-4 overflow-hidden">
+                        <img src="/image/food/food_osh.jpg"
+                             class="w-100 h-100 object-fit-cover"
+                             alt="Плов">
+                    </div>
+                </div>
+
+                <!-- Текст -->
+                <div class="col-lg-6">
+                    <div class="d-flex flex-column h-100 gap-3 reveal">
+
+                        <div class="text-card">
+                            <span class="text-accent">Плов</span> — один из самых известных национальных блюд
+                            Узбекистана. Плов является самым почитаемым национальным блюдом Узбекистана.
+                        </div>
+                        <div class="text-card ">
+                            В Узбекистане существуют целые династии ошпазов — поваров плова, где мастерство
+                            приготовления передаётся <span class="text-accent">из поколения в поколение на протяжении 10–15 поколений</span>
+                        </div>
+
+                        <div class="text-card">
+                            Мировой рекорд по приготовлению самого большого плова также принадлежит Узбекистану и
+                            занесён в <span class="text-accent">Книгу рекордов Гиннесса.</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-12 mt-5 reveal">
+                <div class="text-card text-center">
+                                                Плов занимает особое место в культуре узбекского народа. Он является символом уважения, чести и гостеприимства.
+                                                В день свадьбы принято, чтобы отцы жениха и невесты угощали всех своих мужчин знакомых пловом в банкетных залах, <span class="text-accent"> делая застолье на 100–200 человек.</span>
+                                                Когда жених приходит за невестой, его и его друзей обязательно принято угощать пловом в доме невесты.
+                                                Если в дом приходит почётный гость, в знак глубочайшего уважения хозяевам принято приготовить самое достойное блюдо — плов.
+                                                Даже если кто-то умрет, семье умершего, если позволяет финансовое состояние, принято устраивать застолье на 100-200 человек и звать всех мужчин знавших этого человека и после молитвы в честь умершего ,  угощать всех пловом в память об ушедшем человеке, как знаком уважения и доброй памяти.
+                                                А в народе существует еще привычка,если у человека произошло любое радостное событие и его знакомые требуют отметить это и он должен проставиться, то это чаще всего становиться застолье с пловом за его счет
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section mb-5">
+        <div class="container">
+
+            <h2 class="section-title text-center reveal">
+                <span>Родина блюд</span>
+            </h2>
+
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_shashlik.jpg" alt="">
+                        <p>Шашлык</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_kazanKebab.jpg" alt="">
+                        <p>Казан кебаб</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_norin.jpg" alt="">
+                        <p>Нарын</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_manti.jpg" alt="">
+                        <p>Манты</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 col-lg-2 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_xonim.jpg" alt="">
+                        <p>Ханым</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- SECTION 3 -->
+    <section class="section mb-5">
+        <div class="container">
+
+            <h2 class="section-title text-center reveal">
+                <span>Тандыр</span>
+            </h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <!-- Картинка -->
+                <div class="col-lg-6 reveal">
+                    <img src="/image/food/food_tandir.jpg"
+                         class="img-fluid w-100 h-100 rounded-4 object-fit-cover"
+                         alt="Тандыр">
+                </div>
+
+                <!-- Текстовые карточки -->
+                <div class="col-lg-6 reveal">
+                    <div class="d-flex flex-column h-100 gap-3">
+
+                        <div class="text-card">
+                            Одной из самых главных инструментов при приготовлении многих узбекских блюд
+                            является <span class="text-accent">тандыр</span>, традиционная узбекская печь.
+                        </div>
+
+                        <div class="text-card">
+                            Он есть практически везде: во многих домах, узбекских пекарнях и ресторанах.
+                        </div>
+
+                        <div class="text-card">
+                            На нём чаще всего делают <span class="text-accent">лепёшки и патыры.</span>
+                            Поэтому в Узбекистане очень много видов лепёшек и патыров —
+                            у каждого региона свой популярный вид.
+                        </div>
+
+                        <div class="text-card">
+                            В тандыре также часто готовят <span class="text-accent">самсу</span> и <span class="text-accent">тандыр-гошт.</span>,
+                            которые являются очень популярными национальными блюдами Узбекистана.
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section class="section mb-5">
+        <div class="container">
+
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="img-card h-100">
+                        <img src="/image/food/food_somsa.jpg" alt="Самса">
+                        <span>Самса</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="img-card h-100">
+                        <img src="/image/food/food_gosht.jpg" alt="Тандыр гошт">
+                        <span>Тандыр гошт</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="img-card h-100">
+                        <img src="/image/food/food_yopgan.jpg" alt="Ташкентская лепешка">
+                        <span>Ташкентская лепешка</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="img-card h-100">
+                        <img src="/image/food/food_chigatay.jpg" alt="Чигатайская лепешка">
+                        <span>Чигатайская лепешка</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="img-card h-100">
+                        <img src="/image/food/food_namangan.jpg" alt="Наманганский патыр">
+                        <span>Наманганский патыр</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-2 reveal">
+                    <div class="img-card h-100">
+                        <img src="/image/food/food_patir.jpg" alt="Патыр">
+                        <span>Патыр</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section class="section banner mb-5">
+        <div class="container">
+
+            <!-- Заголовок -->
+            <div class="banner-text text-center mb-4 reveal">
+                <h2>
+                    Весна — волшебный сезон, когда узбекская кухня
+                    ещё больше зацветает, пополняясь традиционными
+                    <span class="text-accent">весенними блюдами</span>
+                </h2>
+            </div>
+
+            <!-- Карусель -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 reveal">
+
+                    <div id="springFoodCarousel"
+                         class="carousel slide"
+                         data-bs-ride="carousel">
+
+                        <div class="carousel-inner rounded-4 overflow-hidden">
+
+                            <div class="carousel-item active">
+                                <div class="ratio ratio-16x9">
+                                    <img src="/image/food/food_sumalak.jpg"
+                                         class="w-100 h-100 object-fit-cover"
+                                         alt="Сумалак">
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="ratio ratio-16x9">
+                                    <img src="/image/food/food_xalim.jpg"
+                                         class="w-100 h-100 object-fit-cover"
+                                         alt="Халим">
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="ratio ratio-16x9">
+                                    <img src="/image/food/food_salat.jpg"
+                                         class="w-100 h-100 object-fit-cover"
+                                         alt="Салат">
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="ratio ratio-16x9">
+                                    <img src="/image/food/food_suzma.jpg"
+                                         class="w-100 h-100 object-fit-cover"
+                                         alt="Сузьма">
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="ratio ratio-16x9">
+                                    <img src="/image/food/food_ayron.jpg"
+                                         class="w-100 h-100 object-fit-cover"
+                                         alt="Айран">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- controls -->
+                        <button class="carousel-control-prev"
+                                type="button"
+                                data-bs-target="#springFoodCarousel"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+
+                        <button class="carousel-control-next"
+                                type="button"
+                                data-bs-target="#springFoodCarousel"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- SECTION 6 -->
+    <section class="section mb-5">
+        <div class="container">
+
+            <!-- Заголовок -->
+            <h2 class="section-title text-center mb-5 reveal">
+                <span>Чай</span>
+            </h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <!-- Картинка -->
+                <div class="col-lg-6 reveal">
+                    <img src="/image/food/food_choy.jpg"
+                         class="img-fluid rounded-4 w-100 h-100 object-fit-cover"
+                         alt="Чай">
+                </div>
+
+                <!-- Текстовые карточки -->
+                <div class="col-lg-6">
+                    <div class="row g-3 h-100">
+
+                        <div class="col-12 reveal">
+                            <div class="text-card h-100">
+                                Чай занимает особое место в узбекской культуре
+                                и имеет целые правила,
+                                связанные с чаем, которые складывались десятилетиями
+                                в культуре <span class="text-accent">узбекского гостеприимства.</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 reveal">
+                            <div class="text-card h-100">
+                                Когда приходит гость, обязательно первым делом
+                                на стол ставят <span class="text-accent">лепёшки</span> и <span class="text-accent">чай</span>.
+                                Всё остальное подаётся, если гость не против,
+                                но чай и лепёшки ставятся в любом случае
+                                в знак уважения и гостеприимства.
+                            </div>
+                        </div>
+
+                        <div class="col-12 reveal">
+                            <div class="text-card h-100">
+                                Чай принято наливать в пиалу не полностью,
+                                что также является знаком уважения к гостю.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section class="section mb-5">
+        <div class="container">
+
+            <h2 class="section-title text-center mb-5 reveal">
+                <span>Ковурдак</span>
+            </h2>
+
+            <div class="row g-4 align-items-stretch">
+
+                <!-- Картинка -->
+                <div class="col-lg-6 reveal">
+                    <img src="/image/food/food_qovurdaq.jpg"
+                         class="img-fluid rounded-4 w-100 h-100 object-fit-cover"
+                         alt="Ковурдак">
+                </div>
+
+                <!-- Текст -->
+                <div class="col-lg-6 reveal">
+                    <div class="text-card h-100">
+                        <span class="text-accent">Ковурдак</span> — это особое блюдо
+                        национальной кухни, которое готовят
+                        в самый счастливый день —
+                        <span class="text-accent">при рождении ребёнка</span>.
+
+                        <br><br>
+
+                        В этот день мама невесты приносит своей недавно родившей дочери
+                        самостоятельно приготовленное праздничное блюдо.
+                        Оно состоит из разных видов мяса и тефтелей,
+                        различных яиц и овощей.
+
+                        <br><br>
+
+                        Это блюдо предназначено для того, чтобы молодая мать
+                        восстановила силы и получила необходимые витамины после родов,
+                        а также чтобы все гости, пришедшие в этот день,
+                        <span class="text-accent">разделили радость</span>,
+                        попробовав это блюдо.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section mb-5  ">
+        <div class="container">
+
+            <h2 class="section-title mt-5 text-center reveal">
+                <span> Другие блюда Узбекистана</span>
+            </h2>
+
+            <div class="row g-4  mb-3 justify-content-center">
+
+                <div class="col-md-4 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_moxora.jpg">
+                        <p>Мохора</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_tok.jpg">
+                        <p>Ток</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 reveal">
+                    <div class="food-card h-100">
+                        <img src="/image/food/food_yupqa.jpg">
+                        <p>Юпка</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:src="@{/js/components/swapper.js}"></script>
+<script th:src="@{/js/components/dynamicScroll.js}"></script>
+<!--<script th:src="@{/js/pages/tashkent.js}"></script>-->
+
+
+</body>
+</html>

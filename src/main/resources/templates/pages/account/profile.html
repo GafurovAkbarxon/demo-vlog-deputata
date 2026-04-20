@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" th:with="lang=${#locale.language}" >
+<head>
+    <title th:text="#{profileSettings}"></title >
+    <th:block th:insert="fragments/assets/style_links :: css" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <style>
+        .modal {
+            display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -20px; /* выезжает из карточки вниз */
+            margin: auto;
+            width: 100%;
+            padding-top: 20px;
+            animation: slideUp 0.35s ease;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, rgba(0,247,255,0.15), rgba(0,0,40,0.7));
+            border-radius: 18px;
+            border: 1px solid rgba(0,255,255,0.4);
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(0,247,255,0.4);
+            backdrop-filter: blur(18px);
+        }
+        .modal input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        @media (max-width: 600px) {
+            .modal-content {
+                padding: 18px;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        /* Фоновый градиент */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+
+        }
+        main {
+            min-height: calc(100vh - 160px); /* header + footer */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 100px; /* высота header */
+            padding-bottom: 60px;
+        }
+        /* Стеклянная панель */
+        .glass-card {
+            backdrop-filter: blur(16px) saturate(150%);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+            color: #fff;
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00f7ff;
+            text-shadow: 0 0 8px #00f7ff;
+        }
+
+        label {
+            font-weight: 600;
+            color: #cce7ff;
+        }
+
+        input.form-control, select.form-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,255,255,0.3);
+            border-radius: 12px;
+            color: black;
+            transition: 0.3s;
+        }
+
+        input.form-control:focus, select.form-select:focus {
+            outline: none;
+            border-color: #00f7ff;
+            box-shadow: 0 0 10px #00f7ff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-glow {
+            background-color: #00f7ff;
+            color: #000;
+            font-weight: bold;
+            border-radius: 12px;
+            border: none;
+            width: 100%;
+            transition: 0.3s;
+            box-shadow: 0 0 10px #00f7ff;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 20px #00f7ff, 0 0 30px #00f7ff inset;
+            transform: translateY(-2px);
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: block;
+            border: 2px solid #00f7ff;
+            object-fit: cover;
+            transition: 0.3s;
+        }
+
+        .avatar-preview:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #00f7ff;
+        }
+
+        /*sessions*/
+        .session-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .session-card:hover {
+            box-shadow: 0 0 15px rgba(0,247,255,0.4);
+            transform: translateY(-2px);
+        }
+
+        .session-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .session-device {
+            font-weight: 600;
+            color: #00f7ff;
+        }
+
+        .session-meta {
+            font-size: 0.85rem;
+            color: #cce7ff;
+        }
+
+        .session-current {
+            color: #00ff9d;
+            font-size: 0.85rem;
+        }
+
+        .session-btn {
+            background: transparent;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .session-btn:hover {
+            background: #ff4d4d;
+            color: #000;
+        }
+        main {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            flex-direction: column;   /* ВАЖНО */
+            justify-content: flex-start; /* чтобы начиналось сверху */
+            align-items: center;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+    </style>
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+<main sec:authorize="isAuthenticated()">
+    <div class="glass-card"
+         th:with="isGoogle=${user.provider == 'GOOGLE'}">
+        <h2 th:text="#{profileSettings}"></h2>
+
+        <!-- Аватар -->
+        <img th:src="${user.avatarFilename != null and !#strings.isEmpty(user.avatarFilename)}
+              ? '/uploads/images/' + ${user.avatarFilename}
+              : '/image/logo.png'"
+             alt="Avatar"
+             class="avatar-preview">
+
+        <label th:text="#{login}"></label>
+        <input type="text" class="form-control mb-3"
+               th:value="${isGoogle ? user.email : user.username}"
+               disabled>
+
+        <button type="button"
+                class="btn btn-outline-light mt-2"
+                th:if="${!isGoogle}"
+                onclick="openPasswordModal()" th:text="#{editPassword}">
+        </button>
+
+        <form th:action="@{/{lang}/profile(lang=${lang})}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <label th:text="#{name}">Имя</label>
+            <input type="text"
+                   class="form-control mb-2"
+                   id="displayName"
+                   name="displayName"
+                   th:value="${user.displayName}"
+                   required
+                   minlength="3"
+                   maxlength="30">
+            <div id="nameError" class="text-danger small"></div>
+
+
+            <label for="avatarFile" th:text="#{avatar}"></label>
+<!--            <input type="file" class="form-control mb-3" id="avatarFile" name="avatarFile" accept="image/*">-->
+            <label for="avatarFile" class="btn btn-outline-light w-100 mb-2"
+                   th:text="#{chooseFile}"></label>
+
+            <span id="fileName" class="text-light small"
+                  th:text="#{fileNotChosen}"></span>
+
+            <input type="file"
+                   id="avatarFile"
+                   name="avatarFile"
+                   accept="image/*"
+                   hidden>
+            <button type="submit" class="btn btn-glow mt-3" th:text="#{save}"></button>
+        </form>
+    </div>
+
+
+
+
+
+
+
+
+    <div id="passwordModal" class="modal">
+        <div class="modal-content glass-card">
+            <h3 th:text="#{editPassword}"></h3>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input id="oldPassword" autocomplete="current-password" th:placeholder="#{oldPassword}" class="form-control mb-2">
+            <input  id="newPassword" autocomplete="new-password" th:placeholder="#{newPassword}" class="form-control mb-2">
+            <input  id="confirmPassword" autocomplete="new-password" th:placeholder="#{confirmPassword}" class="form-control mb-2">
+
+            <div id="passwordError" class="text-danger small mb-2"></div>
+
+            <button id="savePasswordBtn" class="btn btn-glow" disabled th:text="#{save}"></button>
+            <button type="button" onclick="closePasswordModal()" class="btn btn-secondary mt-2" th:text="#{cancel}"></button>
+        </div>
+    </div>
+
+    <div class="glass-card mt-4">
+        <h3>Активные сессии</h3>
+    <div th:each="s : ${sessions}" class="session-card">
+
+        <div class="session-info">
+
+            <div class="session-device">
+                <span th:text="${s.browser} ?: 'Unknown browser'"></span>
+                •
+                <span th:text="${s.os} ?: 'Unknown OS'"></span>
+            </div>
+
+            <div class="session-meta">
+                📍
+                <span th:text="${s.city} ?: ''"></span>
+                <span th:if="${s.city != null and s.country != null}">,</span>
+                <span th:text="${s.country} ?: 'Unknown location'"></span>
+            </div>
+
+            <div class="session-meta">
+                🌐 <span th:text="${s.ip}"></span>
+            </div>
+
+            <div class="session-meta">
+                🕒
+                <span class="last-active"
+                      th:data-time="${s.lastRequestAt}"
+                      th:text="${#dates.format(s.lastRequestAt, 'dd.MM.yyyy HH:mm')}">
+                </span>
+            </div>
+
+            <div th:if="${s.current}" class="session-current">
+                🟢 Текущая сессия
+            </div>
+        </div>
+
+        <form th:if="${!s.current}"
+              th:action="@{/{lang}/profile/expire/{id}(lang=${lang}, id=${s.sessionId})}"
+              method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button class="session-btn">
+                Завершить
+            </button>
+        </form>
+
+    </div></div>
+</main>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:inline="javascript">
+    const i18n = {
+        nameMin: [[#{nameMin}]],
+        nameMax: [[#{nameMax}]],
+        nameInvalid: [[#{nameInvalid}]],
+        passMin: [[#{passwordMin}]],
+        passMismatch: [[#{passwordMismatch}]],
+        passSame: [[#{passwordSame}]],
+        passChanged: [[#{passwordChanged}]]
+    };
+</script>
+<script>
+    const nameInput = document.getElementById("displayName");
+    const nameError = document.getElementById("nameError");
+    nameInput.addEventListener("input", () => {
+        const val = nameInput.value.trim();
+
+        if (val.length < 3) {
+            nameError.textContent = i18n.nameMin;
+        } else if (val.length > 30) {
+            nameError.textContent = i18n.nameMax;
+        } else if (!/^[a-zA-Zа-яА-Я0-9_ ]+$/.test(val)) {
+            nameError.textContent =  i18n.nameInvalid;
+        } else {
+            nameError.textContent = "";
+        }
+    });
+
+    const oldPass = document.getElementById("oldPassword");
+    const newPass = document.getElementById("newPassword");
+    const confirmPass = document.getElementById("confirmPassword");
+    const passError = document.getElementById("passwordError");
+    const saveBtn = document.getElementById("savePasswordBtn");
+
+    function validatePasswords() {
+        const oldVal = oldPass.value.trim();
+        const newVal = newPass.value.trim();
+        const confVal = confirmPass.value.trim();
+
+        if (newVal.length < 6) {
+            passError.textContent = i18n.passMin;
+            saveBtn.disabled = true;
+        }
+        else if (newVal !== confVal) {
+            passError.textContent = i18n.passMismatch;
+            saveBtn.disabled = true;
+        }
+        else if (newVal === oldVal) {
+            passError.textContent = i18n.passSame;
+            saveBtn.disabled = true;
+        }
+        else {
+            passError.textContent = "";
+            saveBtn.disabled = false;
+        }
+    }
+
+    oldPass.addEventListener("input", validatePasswords);
+    newPass.addEventListener("input", validatePasswords);
+    confirmPass.addEventListener("input", validatePasswords);
+
+
+
+
+        function openPasswordModal() {
+        document.getElementById("passwordModal").style.display = "block";
+    }
+        function closePasswordModal() {
+        document.getElementById("passwordModal").style.display = "none";
+    }
+
+
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content
+    document.getElementById("savePasswordBtn").addEventListener("click", () => {
+        fetch("/ru/profile/change-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            },
+            body: JSON.stringify({
+                oldPassword: oldPass.value,
+                newPassword: newPass.value
+            })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Error 01");
+                return res.text();
+            })
+            .then(msg => {
+                alert(i18n.passChanged);
+                closePasswordModal();
+            })
+            .catch(err => {
+                passError.textContent = err.message;
+            });
+    });
+
+
+
+
+
+
+
+
+
+
+    const fileInput = document.getElementById("avatarFile");
+    const fileNameSpan = document.getElementById("fileName");
+
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+            fileNameSpan.textContent = fileInput.files[0].name;
+        } else {
+            fileNameSpan.textContent = i18n.fileNotChosen;
+        }
+    });
+// был столько минут назад
+    function timeAgo(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diff = Math.floor((now - date) / 1000);
+
+        if (diff < 60) return "только что";
+        if (diff < 3600) return Math.floor(diff / 60) + " мин назад";
+        if (diff < 86400) return Math.floor(diff / 3600) + " ч назад";
+        return Math.floor(diff / 86400) + " дн назад";
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        const elements = document.querySelectorAll(".last-active");
+
+        elements.forEach(el => {
+            const date = el.dataset.time;
+            el.textContent = timeAgo(date);
+        });
+    });
+    function updateAllTimes() {
+        const elements = document.querySelectorAll(".last-active");
+        elements.forEach(el => {
+            el.textContent = timeAgo(el.dataset.time);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        updateAllTimes();
+        setInterval(updateAllTimes, 60000); // обновлять каждую минуту
+    });
+</script>
+
+</body>
+</html>

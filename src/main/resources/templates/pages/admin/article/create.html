@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml" lang="ru"
+      sec:authorize="hasRole('ADMIN')">
+<head>
+    <title>Создание статьи</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/article/create.css}" />
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+
+
+<div class="container my-4">
+    <h1 class="mt-5 fw-bold text-center big-title ">Создать статью — Конструктор блоков</h1>
+
+    <form th:action="@{/ru/admin/article/create}" th:object="${dto}" method="post" enctype="multipart/form-data">
+        <!-- CSRF для Spring (Thymeleaf) -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:field="*{blocksJson}">
+        <div th:if="${#fields.hasErrors('blocksJson')}" th:errors="*{blocksJson}"></div>
+        <div class="row g-4">
+
+
+            <div id="blocksContainer" class="col-lg-9 offset-lg-0 mx-auto" >
+
+            </div>
+
+            <!-- RIGHT: article params -->
+            <div class="col-lg-3">
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-sm btn-primary " onclick="addBlock('text')">+ Текст</button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="addBlock('image')">+ Картинка</button>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="addBlock('quote')">+ Цитата</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Параметры статьи</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label">Заголовок статьи</label>
+                            <input class="form-input" th:field="*{title}" type="text" maxlength="255"/>
+                            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Название ссылки на латинице</label>
+                            <input class="form-input" th:field="*{slug}" type="text" id="slugInput"
+                                   required
+                                   maxlength="255"
+                                   pattern="[a-z0-9-]+"
+                                   title="Только латиница, цифры и дефис"
+                                   placeholder="naprimer-takoy-slug"/>
+                            <div th:if="${#fields.hasErrors('slug')}" th:errors="*{slug}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Мета описание</label>
+                            <input class="form-input" th:field="*{descriptions}" type="text" required/>
+                            <div th:if="${#fields.hasErrors('descriptions')}" th:errors="*{descriptions}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alt обложки</label>
+                            <input class="form-input" th:field="*{altCover}" type="text" required/>
+                            <div th:if="${#fields.hasErrors('altCover')}" th:errors="*{altCover}"></div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Обложка</label>
+                            <input class="form-input" type="file" th:field="*{coverFile}" accept="image/*" required minlength="3"
+                                   onchange="previewCover(this)">
+                            <div th:if="${#fields.hasErrors('coverFile')}" th:errors="*{coverFile}"></div>
+                            <!-- скрытое поле для позиции обложки -->
+                            <input type="hidden" th:field="*{coverPosition}">
+                            <div th:if="${#fields.hasErrors('coverPosition')}" th:errors="*{coverPosition}"></div>
+                        </div>
+
+                        <div class="card mt-4 preview-card">
+                            <div class="cover-preview-wrapper">
+                                <img id="articleCardCover" class="card-img-top d-none">
+                            </div>
+                            <div class="card-body">
+                                <h5 id="articleCardTitle" class="card-title">Заголовок статьи</h5>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Язык</label>
+                            <select th:field="*{language}" class="form-select" required>
+                                <option th:each="lang : ${languages}"
+                                        th:value="${lang}"
+                                        th:text="${lang}">ru
+                                </option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select th:field="*{category}" class="form-select" required>
+                                <option th:each="cat : ${categories}"
+                                        th:value="${cat}"
+                                        th:text="#{${cat.langKey}}">Статья
+                                </option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Теги</label>
+                            <select th:field="*{tagNames}" class="form-control select-tags" multiple="multiple">
+                                <option th:each="tag : ${allTags}"
+                                        th:value="${tag}"
+                                        th:text="${tag}">
+                                </option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('tagNames')}" th:errors="*{tagNames}"></div>
+
+                        </div>
+
+
+                        <div class="d-grid">
+                            <button id="submitBtn" type="submit" class="btn btn-success" disabled>Создать статью</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<template id="textBlockTemplate">
+    <div class="card mb-2 block " data-type="text">
+        <div class="block-drag-handle">⇅</div>
+        <div class="card-body">
+            <input type="hidden" data-key="type" value="TEXT">
+            <input type="hidden" data-key="content">
+
+            <!-- Toolbar для форматирования -->
+
+
+            <div contenteditable="true" class="editor-text"
+                 oninput="autoResize(this)">
+            </div>
+            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeBlock(this)">Удалить</button>
+        </div>
+    </div>
+</template>
+<template id="quoteBlockTemplate">
+    <div class="card mb-2 block" data-type="quote">
+        <div class="block-drag-handle">⇅</div>
+        <div class="card-body">
+            <input type="hidden" data-key="type" value="QUOTE">
+            <input type="hidden" data-key="content">
+
+            <div contenteditable="true"
+                 class="block-quote"
+                 oninput="autoResize(this)">
+                Цитата...
+            </div>
+
+            <button type="button" class="btn btn-sm btn-danger mt-2 " onclick="removeBlock(this)">
+                Удалить
+            </button>
+        </div>
+    </div>
+</template>
+<template id="imageBlockTemplate">
+    <div class="card mb-2 block" data-type="image">
+        <div class="block-drag-handle">⇅</div>
+        <div class="card-body">
+            <input type="hidden" data-key="type" value="IMAGE">
+            <input type="hidden" data-key="content">
+            <img class="img-fluid rounded mb-2 d-none image-preview">
+            <input type="file" class="form-control image-input">
+            <button type="button" class="btn btn-sm btn-danger mt-2 " onclick="removeBlock(this)">Удалить</button>
+        </div>
+    </div>
+</template>
+<template id="toolbarButtonsTemplate">
+    <div class="toolbar mb-2">
+        <button type="button" onclick="format(this,'bold')" onmousedown="event.preventDefault()"><b>B</b></button>
+        <button type="button" onclick="format(this,'italic')" onmousedown="event.preventDefault()"><i>I</i></button>
+        <button type="button" onclick="format(this,'underline')" onmousedown="event.preventDefault()"><u>U</u></button>
+        <button type="button" onclick="addLink(this)" onmousedown="event.preventDefault()">Link</button>
+        <button type="button" onclick="format(this,'insertUnorderedList')" onmousedown="event.preventDefault()">• UL</button>
+        <button type="button" onclick="format(this,'insertOrderedList')" onmousedown="event.preventDefault()">1. OL</button>
+        <div class="dropdown d-inline-block"><button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Заголовок</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','P')">Обычный</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','H1')">H1</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','H2')">H2</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','H3')">H3</a></li>
+            </ul>
+        </div>
+        <div class="dropdown d-inline-block"><button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Цвет</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'foreColor','#111')">Чёрный</a></li>
+                <li><a class="dropdown-item text-primary" onmousedown="event.preventDefault()" onclick="formatValue(this,'foreColor','#0d6efd')">Синий</a></li>
+                <li><a class="dropdown-item text-secondary" onmousedown="event.preventDefault()" onclick="formatValue(this,'foreColor','#6c757d')">Серый</a></li>
+            </ul>
+        </div>
+        <div class="dropdown d-inline-block"><button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Выравнивание</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="format(this,'justifyLeft')">Слева</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="format(this,'justifyCenter')">По центру</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="format(this,'justifyRight')">Справа</a></li>
+            </ul>
+        </div>
+    </div>
+</template>
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:src="@{/js/pages/create.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="ru"
+      sec:authorize="hasRole('ADMIN')">
+<head>
+    <title>Изменение статьи</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/article/edit.css}" />
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+<div th:replace="fragments/result :: result(is_done, message)"></div>
+
+
+<div class="container my-4">
+    <h1 class="mt-5 fw-bold text-center big-title ">Изменение статью — Конструктор блоков</h1>
+
+    <form th:action="@{/ru/admin/article/edit/{id}(id=${article.id})}" method="post" enctype="multipart/form-data">
+        <!-- CSRF для Spring (Thymeleaf) -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" name="blocksJson" id="blocksJson">
+        <div class="row g-4">
+
+
+            <div id="blocksContainer" class="col-lg-9 offset-lg-0 mx-auto" >
+
+            </div>
+
+            <!-- RIGHT: article params -->
+            <div class="col-lg-3">
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-sm btn-primary " onclick="addBlock('text')">+ Текст</button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="addBlock('image')">+ Картинка</button>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="addBlock('quote')">+ Цитата</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Параметры статьи</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select name="category" class="form-select" required>
+                                <option th:each="cat : ${categories}"
+                                        th:value="${cat}"
+                                        th:text="${cat}"
+                                        th:selected="cat==article.category">Новости</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Заголовок статьи</label>
+                            <input class="form-input" name="title" type="text" th:value="${article.title}" maxlength="250" required
+                                   minlength="3"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Название ссылки</label>
+                            <input class="form-input" name="slug" type="text" th:value="${article.slug}" required
+                                   minlength="3"
+                                   id="slugInput"
+                                   pattern="[a-z0-9-]+"
+                                   title="Только латиница, цифры и дефис"
+                                   placeholder="naprimer-takoy-slug"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Мета описание</label>
+                            <input class="form-input" name="descriptions" type="text" th:value="${article.seoDescription}" required
+                                   minlength="3"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alt теги обложки</label>
+                            <input class="form-input" name="altCover" type="text" th:value="${article.altCover}" required
+                                   minlength="3"/>
+                        </div>
+
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Обложка</label>
+                            <input class="form-input" type="file" name="coverFile" accept="image/*"
+                                   onchange="previewCover(this)">
+                            <input type="hidden" name="coverPosition" id="coverPosition" value="50% 50%" th:value="${article.coverPosition ?: '50% 50%'}">
+
+                        </div>
+                        <div class="card mt-4 preview-card">
+<!--                            <img id="articleCardCover" class="card-img-top d-none">-->
+                            <div class="cover-preview-wrapper">
+                                <img id="articleCardCover" class="card-img-top d-none">
+                            </div>
+                            <div class="card-body">
+                                <h5 id="articleCardTitle" class="card-title">Заголовок статьи</h5>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" for="commentsEnabled">Комментарии</label>
+
+                            <div class="form-check form-switch">
+<!--                                <input type="hidden" name="commentsEnabled" value="false">-->
+
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="commentsEnabled"
+                                       name="commentsEnabled"
+                                       value="true"
+                                       th:checked="${article.commentsEnabled}">
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Язык</label>
+                            <select name="language" class="form-select" required>
+                                <option th:each="lang : ${languages}"
+                                        th:value="${lang}"
+                                        th:text="${lang}"
+                                        th:selected="${lang==article.language}"></option>
+                            </select>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Теги</label>
+                            <select name="tagNames"
+                                    class="form-control select-tags"
+                                    multiple="multiple">
+
+                                <option th:each="tag : ${allTags}"
+                                        th:value="${tag}"
+                                        th:text="${tag}"
+                                        th:selected="${article.tags.contains(tag)}">
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Сохранить статью</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<template id="textBlockTemplate">
+    <div class="card mb-2 block " data-type="text">
+        <div class="block-drag-handle">⇅</div>
+        <div class="card-body">
+            <input type="hidden" data-key="type" value="TEXT">
+            <input type="hidden" data-key="content">
+
+            <!-- Toolbar для форматирования -->
+
+
+            <div contenteditable="true" class="editor-text"
+                 oninput="autoResize(this)">
+            </div>
+            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeBlock(this)">Удалить</button>
+        </div>
+    </div>
+</template>
+<template id="quoteBlockTemplate">
+    <div class="card mb-2 block" data-type="quote">
+        <div class="block-drag-handle">⇅</div>
+        <div class="card-body">
+            <input type="hidden" data-key="type" value="QUOTE">
+            <input type="hidden" data-key="content">
+
+            <div contenteditable="true"
+                 class="block-quote"
+                 oninput="autoResize(this)">
+                Цитата...
+            </div>
+
+            <button id="submitBtn"  type="button" class="btn btn-sm btn-danger mt-2 " onclick="removeBlock(this)">
+                Удалить
+            </button>
+        </div>
+    </div>
+</template>
+<template id="imageBlockTemplate">
+    <div class="card mb-2 block" data-type="image">
+        <div class="block-drag-handle">⇅</div>
+        <div class="card-body">
+            <input type="hidden" data-key="type" value="IMAGE">
+            <input type="hidden" data-key="content">
+            <img class="img-fluid rounded mb-2 d-none image-preview">
+            <input type="file" class="form-control image-input">
+            <button type="button" class="btn btn-sm btn-danger mt-2 " onclick="removeBlock(this)">Удалить</button>
+        </div>
+    </div>
+</template>
+<template id="toolbarButtonsTemplate">
+    <div class="toolbar mb-2">
+        <button type="button" onclick="format(this,'bold')" onmousedown="event.preventDefault()"><b>B</b></button>
+        <button type="button" onclick="format(this,'italic')" onmousedown="event.preventDefault()"><i>I</i></button>
+        <button type="button" onclick="format(this,'underline')" onmousedown="event.preventDefault()"><u>U</u></button>
+        <button type="button" onclick="addLink(this)" onmousedown="event.preventDefault()">Link</button>
+        <button type="button" onclick="format(this,'insertUnorderedList')" onmousedown="event.preventDefault()">• UL</button>
+        <button type="button" onclick="format(this,'insertOrderedList')" onmousedown="event.preventDefault()">1. OL</button>
+        <div class="dropdown d-inline-block"><button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Заголовок</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','P')">Обычный</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','H1')">H1</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','H2')">H2</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'formatBlock','H3')">H3</a></li>
+            </ul>
+        </div>
+        <div class="dropdown d-inline-block"><button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Цвет</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="formatValue(this,'foreColor','#111')">Чёрный</a></li>
+                <li><a class="dropdown-item text-primary" onmousedown="event.preventDefault()" onclick="formatValue(this,'foreColor','#0d6efd')">Синий</a></li>
+                <li><a class="dropdown-item text-secondary" onmousedown="event.preventDefault()" onclick="formatValue(this,'foreColor','#6c757d')">Серый</a></li>
+            </ul>
+        </div>
+        <div class="dropdown d-inline-block"><button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Выравнивание</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="format(this,'justifyLeft')">Слева</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="format(this,'justifyCenter')">По центру</a></li>
+                <li><a class="dropdown-item" onmousedown="event.preventDefault()" onclick="format(this,'justifyRight')">Справа</a></li>
+            </ul>
+        </div>
+    </div>
+</template>
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:inline="javascript">
+    function updateSubmitState() {
+        $('#submitBtn').prop('disabled', $('.block').length === 0);
+    }
+
+    $(document).on('click', '[onclick^="addBlock"]', updateSubmitState);
+    $(document).on('click', '[onclick^="removeBlock"]', updateSubmitState);
+
+    let firstError = true;
+
+
+    $(document).ready(function () {
+        const coverName = /*[[${article.coverName}]]*/ null;
+        const articleTitleFromServer = /*[[${article.title}]]*/ '';
+         const coverPos = $('#coverPosition').val();
+        const existingBlocks = /*[[${article.blocks}]]*/ '[]';
+
+        // Показ существующей обложки
+        if (coverName) {
+            // $('#articleCardCover')
+            //     .attr('src', '/uploads/images/' + coverName)
+            //     .removeClass('d-none');
+            const img = $('#articleCardCover')[0];
+            img.src = '/uploads/images/' + coverName;
+            img.classList.remove('d-none');
+
+            if (coverPos) {
+                img.style.objectPosition = coverPos;
+            }
+        }
+        $('#articleCardTitle').text(articleTitleFromServer || 'Заголовок статьи');
+        if (existingBlocks && existingBlocks.length) {
+            existingBlocks.forEach(renderBlock);
+        }
+
+
+    });
+    function renderBlock(block) {
+        let type;
+
+        switch (block.type) {
+            case 'TEXT': type = 'text'; break;
+            case 'QUOTE': type = 'quote'; break;
+            case 'IMAGE': type = 'image'; break;
+            default: return;
+        }
+
+        addBlock(type);
+
+        const $block = $('#blocksContainer .block').last();
+
+        // TEXT / QUOTE
+        if (type === 'text' || type === 'quote') {
+            const $editable = $block.find('[contenteditable]');
+            $editable.html(block.content || '');
+            saveEditableContent($block);
+        }
+
+        // IMAGE
+        if (type === 'image') {
+            const fileName = block.content;
+
+            if (fileName) {
+                $block.find('input[data-key="content"]').val(fileName);
+
+                const img = $block.find('.image-preview')[0];
+                img.src = '/uploads/images/' + fileName;
+                img.classList.remove('d-none');
+            }
+        }
+    }
+
+    function addBlock(type) {
+        const templateMap = {
+            text: 'textBlockTemplate',
+            image: 'imageBlockTemplate',
+            quote: 'quoteBlockTemplate'
+        };
+
+        const block = document.getElementById(templateMap[type]).content.cloneNode(true);
+
+        if (type === 'text') {
+            const toolbar = document.getElementById('toolbarButtonsTemplate').content.cloneNode(true);
+            block.querySelector('.card-body').prepend(toolbar);
+        }
+        $('#blocksContainer').append(block);
+    }
+
+
+
+    // Удаление блока
+    function removeBlock(btn) {
+        $(btn).closest('.block').remove();
+    }
+    function saveBlocksToHiddenInput() {
+        const blocks = collectBlocks();
+        $('#blocksJson').val(JSON.stringify(blocks));
+    }
+    function collectBlocks() {
+        const blocks = [];
+
+        $('.block').each(function () {
+            const $block = $(this);
+
+            const type = $block.find('input[data-key="type"]').val();
+            const content = $block.find('input[data-key="content"]').val() || null;
+
+            if (!type) return;
+
+            blocks.push({
+                type: type,
+                content: content
+            });
+        });
+
+        return blocks;
+    }
+
+
+    function saveEditableContent($block) {
+        if (!$block.find('[contenteditable]').length) return;
+        const html = $block.find('[contenteditable]').html()?.trim() || '';
+
+        let input = $block.find('input[data-key="content"]');
+        if (!input.length) {
+            input = $('<input>', {
+                type: 'hidden',
+                'data-key': 'content'
+            }).appendTo($block);
+        }
+
+        input.val(html);
+    }
+    function validateBlocks() {
+        let isValid = true;
+        firstError = true;
+
+        const blocks = $('.block');
+        // ❗ НЕТ НИ ОДНОГО БЛОКА
+        if (blocks.length === 0) {
+            alert('Добавьте хотя бы один блок в статью');
+            return false;
+        }
+
+
+        $('.block').each(function (index) {
+            const $block = $(this);
+            const type = $block.data('type');
+
+            $block.removeClass('border border-danger');
+
+            if (type === 'text' || type === 'quote') {
+                const content = $block.find('[contenteditable]').html()?.trim();
+
+                if (isEmptyHtml(content)) {
+                    blockInvalid($block, type, index);
+                    isValid = false;
+                }
+            }
+
+            if (type === 'image') {
+                const file = $block.find('input[type="file"]')[0];
+                const existing = $block.find('input[data-key="content"]').val();
+
+
+                if ((!file || file.files.length === 0) && !existing) {
+                    blockInvalid($block, type, index);
+                    isValid = false;
+                }
+            }
+        });
+
+        return isValid;
+    }
+    function blockInvalid($block, type, index) {
+        $block.addClass('border border-danger');
+
+        const labels = {
+            text: 'Пустой текстовый блок',
+            quote: 'Пустая цитата',
+            image: 'Картинка не выбрана'
+        };
+        if (!firstError) return;
+        firstError = false;
+        alert(`Блок #${index + 1}: ${labels[type]}. Заполните или удалите.`);
+    }
+    $(document).on('change', '.image-input', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const $block = $(this).closest('.block');
+        const preview = $block.find('.image-preview')[0];
+
+        // preview локально
+        const reader = new FileReader();
+        reader.onload = e => {
+            preview.src = e.target.result;
+            preview.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+
+        // upload
+        uploadImage(file, function(fileName) {
+            console.log("UPLOAD SUCCESS, filename:", fileName);
+            setImageContent($block, fileName);
+        });
+    });
+
+    function uploadImage(file, callback) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        // Берём CSRF из meta-тегов (или скрытого input)
+        const token = $('input[name="_csrf"]').val(); // или $('meta[name="_csrf"]').attr('content');
+
+
+        $.ajax({
+            url: '/uploads/images',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function(xhr) {
+                if (token) xhr.setRequestHeader('X-CSRF-TOKEN', token); // заголовок для CSRF
+            },
+            success: function(res) {
+                console.log("UPLOAD SUCCESS:", res);
+                callback(res.filename);
+            },
+            error: function(xhr) {
+                console.error("UPLOAD ERROR:", xhr);
+                alert('Ошибка загрузки изображения');
+            }
+        });
+    }
+    function setImageContent($block, fileName) {
+        let input = $block.find('input[data-key="content"]');
+        if (!input.length) {
+            input = $('<input>', { type: 'hidden', 'data-key': 'content' }).appendTo($block);
+        }
+        input.val(fileName);
+    }
+
+
+
+
+
+
+
+
+    // Загружает выбранное изображение для обложки статьи и показывает его в первью.
+    function previewCover(input) {
+        const reader = new FileReader();
+        // reader.onload = e => {
+        //     $('#articleCardCover').attr('src', e.target.result).removeClass('d-none');
+        // };
+        reader.onload = e => {
+            coverPreview.src = e.target.result;
+            coverPreview.classList.remove('d-none');
+            // сброс позиции на центр при загрузке новой картинки
+            currentPos = { x: 50, y: 50 };
+            coverPreview.style.objectPosition = '50% 50%';
+            coverPositionInput.value = '50% 50%';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+
+
+
+
+    // Авторастяжение textarea и contenteditable
+    function autoResize(el) {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+
+
+    function format(btn, command) {
+        const editor = btn.closest('.card-body').querySelector('[contenteditable]');
+        if (!editor) return;
+        editor.focus();
+        document.execCommand(command, false, null);
+    }
+
+    function formatValue(btn, command, value) {
+        const editor = btn.closest('.card-body').querySelector('[contenteditable]');
+        if (!editor) return;
+        editor.focus();
+
+        document.execCommand(command, false, value);
+    }
+
+
+    function addLink(btn) {
+        const editor = btn.closest('.card-body').querySelector('[contenteditable]');
+        if (!editor) return;
+        editor.focus();
+        const url = prompt('URL:');
+        if (!url) return;
+        document.execCommand('createLink', false, url);
+    }
+
+
+    // при вводе заголовка он автоматически показывает его в превью и также автоувеличение высоты
+    $('input[name="title"]').on('input', function () {
+        const value = this.value.trim();
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+        $('#articleCardTitle').text(value || 'Заголовок статьи');
+    });
+
+
+    function isEmptyHtml(html) {
+        if (!html) return true;
+        return html.replace(/<br\s*\/?>/gi, '')
+            .replace(/&nbsp;/gi, '')
+            .trim() === '';
+    }
+
+
+    $('form').on('submit', function (e) {
+        const title = $('input[name="title"]').val().trim();
+        const slug= $('input[name="slug"]').val().trim();
+        const descriptions = $('input[name="descriptions"]').val().trim();
+        const altCover = $('input[name="altCover"]').val().trim();
+
+        if (!title) {
+            alert('Введите заголовок статьи');
+            e.preventDefault();
+            return;
+
+
+        }
+        if (!slug) {
+            alert('Введите название статьи');
+            e.preventDefault();
+            return;
+        }
+        const slugRegex = /^[a-z0-9-]+$/;
+
+        if (!slugRegex.test(slug)) {
+            alert('Slug может содержать только латиницу, цифры и дефис');
+            e.preventDefault();
+            return;
+        }
+
+        if (!descriptions) {
+            alert('Введите мета описание');
+            e.preventDefault();
+            return;
+        }if (!altCover) {
+            alert('Введите alt теги обложки');
+            e.preventDefault();
+            return;
+        }
+        if (!validateBlocks()) {
+            e.preventDefault();
+            return;
+        }
+
+        $('.block').each(function () {
+            saveEditableContent($(this));
+        });
+
+        saveBlocksToHiddenInput();
+    });
+
+
+
+
+
+
+
+
+
+    new Sortable(document.getElementById('blocksContainer'), {
+        animation: 150,
+        handle: '.block-drag-handle',
+        filter: 'input, textarea, button, [contenteditable]',
+        preventOnFilter: false
+    });
+
+
+    // Block schema:
+    // {
+    //   type: 'text' | 'image' | 'quote',
+    //   content: string | null
+    // }
+
+
+
+
+
+    const coverPreview = document.getElementById('articleCardCover');
+    const coverWrapper = document.querySelector('.cover-preview-wrapper');
+    const coverPositionInput = document.getElementById('coverPosition');
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentPos = { x: 50, y: 50 };
+
+    // Инициализация позиции из скрытого поля
+    const initPos = coverPositionInput.value.split(' ');
+    if(initPos.length === 2){
+        currentPos.x = parseFloat(initPos[0]);
+        currentPos.y = parseFloat(initPos[1]);
+        coverPreview.style.objectPosition = `${currentPos.x}% ${currentPos.y}%`;
+    }
+
+    // Начало drag
+    coverWrapper.addEventListener('mousedown', e => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        coverWrapper.style.cursor = 'grabbing';
+    });
+
+    // Drag
+    window.addEventListener('mousemove', e => {
+        if(!isDragging) return;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const wrapperRect = coverWrapper.getBoundingClientRect();
+
+        let newX = currentPos.x + (dx / wrapperRect.width) * 100;
+        let newY = currentPos.y + (dy / wrapperRect.height) * 100;
+
+        newX = Math.min(100, Math.max(0, newX));
+        newY = Math.min(100, Math.max(0, newY));
+
+        // Обновляем визуально
+        coverPreview.style.objectPosition = `${newX}% ${newY}%`;
+
+        // **Обновляем hidden input прямо во время drag**
+        coverPositionInput.value = `${newX.toFixed(2)}% ${newY.toFixed(2)}%`;
+        console.log(coverPositionInput.value);
+    });
+
+    // Конец drag
+    window.addEventListener('mouseup', e => {
+        if(isDragging){
+            isDragging = false;
+            coverWrapper.style.cursor = 'grab';
+            // currentPos уже обновился во время mousemove
+        }
+    });
+
+
+
+
+    $(document).ready(function() {
+        $('.select-tags').select2({
+            tags: true,             // можно вводить новые
+            tokenSeparators: [','],
+            placeholder: "Выберите или добавьте теги"
+        });
+    });
+
+
+    $('input[name="title"]').on('input', function () {
+        if (!slugInput.value) {
+            slugInput.value = this.value
+                .toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9-]/g, '');
+        }
+    });
+</script>
+
+</body>
+</html>

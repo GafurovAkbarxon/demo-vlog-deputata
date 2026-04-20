@@ -1,0 +1,6 @@
+/*кнопка входа через гугл*/
+.google-btn:hover {
+    background-color: #212529 !important; /* bootstrap dark */
+    border-color: #212529;
+    color: #fff !important;
+}

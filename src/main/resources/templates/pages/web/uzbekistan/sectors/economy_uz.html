@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="uz" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Oʻzbekiston — Iqtisodiyot va Biznes</title>
+
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/economy.css}" />
+</head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+
+<section>
+    <h1>Iqtisodiyot <span>Oʻzbekiston</span></h1>
+    <p class="section-sub">
+        Mamlakatning zamonaviy iqtisodiy ko‘rsatkichlari, resurslari va strategik salohiyati
+    </p>
+
+    <div class="economy-grid">
+        <div class="econ-item">
+            <div class="econ-title">YAIM (GDP)</div>
+            <div class="econ-value">TOP-61</div>
+            <div class="econ-desc">$147 mlrd [IMF]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Aholi</div>
+            <div class="econ-value">38 mln</div>
+            <div class="econ-desc">Mintaqadagi eng yirik demografiya. Ishchi kuchi salohiyati [stat.uz]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Jon boshiga YAIM (PPP)</div>
+            <div class="econ-value">TOP-125</div>
+            <div class="econ-desc">Jahon reytingining quyi yarmida. Aholi daromadlari nisbatan past [IMF]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Davlat qarzi</div>
+            <div class="econ-value">$37.4 mlrd</div>
+            <div class="econ-desc">YAIMning 25.4% (xavfsiz daraja) [OʻzR Markaziy banki]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Valyuta</div>
+            <div class="econ-value">TOP-146</div>
+            <div class="econ-desc">
+                Dunyoning eng zaif valyutalari reytingida 150 ta valyuta orasida [Findexify]
+                <!--
+                Izoh:
+                Plyuslar: eksport (raqobatbardosh)
+                Minuslar: import (qimmatroq), aholi (dollarda hisoblaganda “kambagʻalroq”)
+                -->
+            </div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Savdo balansi</div>
+            <div class="econ-value">Manfiy</div>
+            <div class="econ-desc">Eksport 33.8 mlrd / Import 47.4 mlrd</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Infratuzilma</div>
+            <div class="econ-value">TOP-52</div>
+            <div class="econ-desc">Yoʻllar, logistika, raqamlashtirish [GQII]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Oltin</div>
+            <div class="econ-value">TOP-4</div>
+            <div class="econ-desc">Yer osti oltin zaxiralari bo‘yicha. Zaxiralar bo‘yicha TOP-17</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Uran</div>
+            <div class="econ-value">TOP-9</div>
+            <div class="econ-desc">Dunyo zaxiralarining taxminan 2%</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Gaz</div>
+            <div class="econ-value">TOP-17</div>
+            <div class="econ-desc">Gaz zaxiralari bo‘yicha</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Paxta</div>
+            <div class="econ-value">TOP-11</div>
+            <div class="econ-desc">Eksport bo‘yicha [UN Comtrade]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Turizm</div>
+            <div class="econ-value">11.7 mln</div>
+            <div class="econ-desc">yiliga [stat.uz]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Sof migratsiya reytingi</div>
+            <div class="econ-value">Manfiy</div>
+            <div class="econ-desc">Mamlakatdan ketuvchilar soni kiruvchilardan ko‘p [UN DESA]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Soʻz erkinligi va siyosiy huquqlar indeksi</div>
+            <div class="econ-value">12/100 BALL</div>
+            <div class="econ-desc">“NOT FREE” toifasiga kiradi [Freedom House]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Mulk huquqi va biznes himoyasi indeksi</div>
+            <div class="econ-value">34/100 BALL</div>
+            <div class="econ-desc">Jahon o‘rtacha ko‘rsatkichidan past [The Heritage Foundation]</div>
+        </div>
+    </div>
+</section>
+
+<section class="ranking">
+    <h2>🏛 TOP-6 <span>davlat kompaniyalari</span></h2>
+    <div class="ranking-grid">
+        <div class="brand"><strong>Uzbekistan Airways</strong>Aviatsiya</div>
+        <div class="brand"><strong>UzAuto</strong>Avtosanoat</div>
+        <div class="brand"><strong>AGMK</strong>Mis</div>
+        <div class="brand"><strong>NGMK</strong>Oltin</div>
+        <div class="brand"><strong>UzTelecom</strong>Telekommunikatsiya</div>
+        <div class="brand"><strong>UzInfocom</strong>IT-infratuzilma</div>
+    </div>
+</section>
+
+<section class="ranking">
+    <h2>🔥 TOP-15 <span>yetakchi brendlar</span></h2>
+    <div class="ranking-grid">
+        <div class="brand">Korzinka</div>
+        <div class="brand">Safia</div>
+        <div class="brand">Ermak</div>
+        <div class="brand">Click</div>
+        <div class="brand">OFB</div>
+        <div class="brand">Grandpharm</div>
+        <div class="brand">IBR</div>
+        <div class="brand">Amirsoy</div>
+        <div class="brand">AKFA</div>
+        <div class="brand">NMEDOV</div>
+        <div class="brand">FeedUp</div>
+        <div class="brand">Navruz International</div>
+        <div class="brand">EVOS</div>
+        <div class="brand">Uzum</div>
+        <div class="brand">Rizanova</div>
+    </div>
+</section>
+
+<section class="ranking">
+    <h2>🏦 TOP-4 <span>davlat bilan bogʻliq xususiy gigantlar</span></h2>
+    <div class="ranking-grid">
+        <div class="brand">Saber</div>
+        <div class="brand">Paynet</div>
+        <div class="brand">UzCard</div>
+        <div class="brand">Carvon</div>
+    </div>
+</section>
+
+<section class="ranking">
+    <h2>🚀 TOP-13 <span>istiqbolli brendlar</span></h2>
+    <div class="ranking-grid">
+        <div class="brand">Tahrikchi</div>
+        <div class="brand">MohirDev</div>
+        <div class="brand">Afisha Media</div>
+        <div class="brand">Asaxiy</div>
+        <div class="brand">Sharq</div>
+        <div class="brand">Magic Bot</div>
+        <div class="brand">Comfort Oil</div>
+        <div class="brand">Inter Nation</div>
+        <div class="brand">Oqtepa Lavash</div>
+        <div class="brand">MaxWay</div>
+        <div class="brand">Beshqozon</div>
+        <div class="brand">Coffelito</div>
+        <div class="brand">Bellissimo</div>
+    </div>
+</section>
+
+<section th:if="${articles.size() >= 3}" class="container-fluid">
+    <div class="swiper-title-wrapper">
+        <a th:href="@{/{lang}/article/all(lang=${lang})}"
+           class="swiper-title-link"
+           th:text="#{allArticles}">
+        </a>
+    </div>
+
+    <div class="swiper myCoverflow">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="article : ${articles}">
+                <div class="article-card">
+                    <a th:href="@{/{lang}/article/{slug}(lang=${lang}, slug=${article.slug})}"
+                       class="article-link">
+
+                        <img class="article-cover"
+                             th:src="@{/uploads/images/{name}(name=${article.coverName})}"
+                             th:style="'object-fit: cover; object-position: ' + ${article.coverPosition} + ';'"
+                             alt="Muqova">
+
+                        <div class="article-overlay"></div>
+
+                        <h5 class="article-title" th:text="${article.title}">
+                            Sarlavha
+                        </h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/components/swapper.js}"></script>
+<script th:src="@{/js/layouts/header.js}"></script>
+</body>
+</html>

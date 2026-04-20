@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Доступ запрещён</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="googlebot" content="noindex, nofollow, noarchive">
+
+    <th:block th:insert="fragments/assets/style_links :: css" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+</head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+
+<main>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow-lg p-4" style="max-width: 560px; width: 100%; border-radius: 18px;">
+            <div class="text-center">
+                <h2 class="fw-bold mb-2">Доступ запрещён</h2>
+                <p class="text-muted mb-4">
+                    У вас нет прав для просмотра этой страницы.
+                </p>
+
+                <div class="d-flex gap-2 justify-content-center">
+                    <a class="btn btn-primary" th:href="@{/ru/home}">На главную</a>
+                    <a class="btn btn-outline-secondary" th:href="@{/auth/login}">Войти</a>
+                </div>
+
+                <hr class="my-4">
+
+                <small class="text-muted">
+                    Если вы считаете, что это ошибка — обратитесь к администратору.
+                </small>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+</body>
+</html>

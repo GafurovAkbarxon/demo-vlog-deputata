@@ -1,0 +1,16 @@
+<div th:fragment="result(is_done, message)">
+    <div class="custom-alert" th:if="${is_done == true}">
+        <div class="alert alert-success alert-dismissible">
+            <a aria-label="close" class="close" data-dismiss="alert" href="#">&times;</a>
+            <strong>Успешно! </strong>
+            <span th:text="${message}"></span>
+        </div>
+    </div>
+    <div class="custom-alert" th:if="${is_done == false}">
+        <div class="alert alert-danger alert-dismissible">
+            <a aria-label="close" class="close" data-dismiss="alert" href="#">&times;</a>
+            <strong>Ошибка! </strong>
+            <span th:text="${message}"></span>
+        </div>
+    </div>
+</div>

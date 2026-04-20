@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" sec:authorize="hasRole('ADMIN')"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>User details</title>
+
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(90deg, #1b2c55,#3d85a9,#63cac8,#b8edff);
+            color: #fff;
+        }
+
+        .card {
+            background: rgba(0,0,0,.25);
+            border-radius: 1rem;
+            border: none;
+            color: #fff;
+        }
+
+
+        .accent {
+            color: #f6c84c;
+        }
+
+    </style>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+<main  class="mt-5">
+<div class="container py-4">
+
+
+
+
+    <h3 class="mb-4"> [[${user.username}]]</h3>
+
+    <!-- ПРОФИЛЬ -->
+    <div class="card p-3 mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <p><span class="accent">Email:</span> [[${user.email}]]</p>
+                <p><span class="accent">Display name:</span> [[${user.displayName}]]</p>
+                <p><span class="accent">Role:</span> [[${user.role}]]</p>
+
+            </div>
+            <div class="col-md-6">
+                <p><span class="accent">Provider:</span> [[${user.provider}]]</p>
+                <p><span class="accent">Создан:</span> [[${user.createdAt}]]</p>
+                <p>
+                    <span class="accent">Статус:</span>
+                    <span th:text="${user.blocked ? 'BLOCKED' : 'ACTIVE'}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- COMMENTS -->
+    <div class="card p-3">
+        <h5 class="accent">Комментарии</h5>
+        <div th:each="c : ${userComments}" class="border-bottom py-2">
+            <div class="small text-warning">Article #[[${c.articleId}]]</div>
+
+            <div>[[${c.text}]]</div>
+            <div class="small text-muted">[[${c.createdAt}]]</div>
+        </div>
+    </div>
+
+    <div class="card p-3 mt-4">
+        <h5 class="accent">Активные сессии</h5>
+        <div th:each="s : ${userSessions}" class="mb-3 p-2 border rounded">
+            <div><b>ID:</b> <span th:text="${s.sessionId}"></span></div>
+            <div><b>IP:</b> <span th:text="${s.ip}"></span></div>
+            <div><b>Браузер:</b> <span th:text="${s.browser}"></span></div>
+            <div><b>OS:</b> <span th:text="${s.os}"></span></div>
+            <div><b>Device:</b> <span th:text="${s.device}"></span></div>
+            <div><b>Последняя активность:</b> <span th:text="${#dates.format(s.lastRequestAt,'yyyy-MM-dd HH:mm')}"></span></div>
+            <form th:action="@{'/ru/admin/users/' + ${user.id} + '/sessions/' + ${s.sessionId} + '/expire'}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button class="btn btn-danger btn-sm mt-1">Завершить</button>
+            </form>
+        </div>
+    </div>
+</div>
+</main>
+<footer th:replace="fragments/footer ::footer"></footer>
+
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+</body>
+</html>

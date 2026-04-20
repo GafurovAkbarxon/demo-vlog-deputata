@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <title th:title="#{tashkent}"></title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/tashkent.css}" />
+<!--    <link rel="preload" as="image" th:href="@{/static/image/t_nestOne.png}" />-->
+
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+
+
+<!-- ===== Banner ===== -->
+<section>
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 reveal">
+                <div class="banner-img">
+                    <img src="/image/t_nestOne.png" class="img-fluid"  th:alt="${#locale.language == 'ru'} ?
+     'NestOne — символ высокое здание Ташкента' :
+     'NestOne- Toshkentning eng baland binosi'">
+                </div>
+            </div>
+            <div class="col-lg-6 reveal">
+                <h1 class="mb-4">Ташкент — <span class="accent">сердце Центральной Азии</span></h1>
+                <p class="fs-5">
+                    Современный мегаполис с тысячелетней историей, где восточная культура
+                    гармонично сочетается с технологичным будущим.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<!-- ===== Carousel ===== -->
+<section>
+    <div class="container reveal">
+        <div id="tashkentCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/image/tashkent/slider/t_xastimom.jpg" class="d-block w-100"
+                    decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Комплекс хазрати имом -самая большая мечеть Ташкента' :
+     'Hazrati Imom majmuasi-Toshkentdagi eng katta masjid'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_koran.jpeg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Ташкентский Коран -самый древний полный рукописный мусхаф Корана в мире из сохранившихся' :
+     'Toshkent Quroni Karimi dunyodagi eng qadimiy toliq qolyozma Quron musxafidir'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_islamCenter.jpg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Здание Центра исламской цивилизации в Ташкенте' :
+     'Toshkentdagi Islom sivilizatsiyasi markazi binosi'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_hilton.jpeg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Отель Hilton - самый роскошный отель Ташкента мирового уровня' :
+     'Hilton mehmonxonasi-Toshkentning jahon darajasidagi eng hashamatli mehmonxonas'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_skver.webp" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Сквер Амира Темура -центральная улица Ташкента' :
+     'Amir Temur kochasi-Toshkent Markaziy kochasi'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_sirk.jpg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Цирк Ташкента -самый большой цирк Центральной Азии' :
+     'Toshkent tsirki - Markaziy Osiyodagi eng katta tsirk'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_metro.jpg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Ташкентское метро -самое красивое метро в СНГ' :
+     'Toshkent metrosi MDHdagi eng chiroyli metro hisoblanadi'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_nbu.jpg" class="d-block w-100"
+                         decoding="async" loading="lazy"  th:alt="${#locale.language == 'ru'} ?
+     'Здание банка NBU - самое культовое здание Ташкента' :
+     'Bank binosi NBU-Toshkentning eng mashhur binosi'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_romanov.jfif" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Дворец Романовых в Ташкенте' :
+     'Toshkentdagi Romanovlar saroyi'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_televishka.jpg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Ташкентская Телебашня -самая высокая телевышка Центральной Азии' :
+     'Toshkent teleminorasi - Markaziy Osiyodagi eng baland teleminora'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_centr.webp" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Площадь независмости в Ташкенте' :
+     'Toshkentdagi mustaqillik maydoni'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_mechet.jfif" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Мечеть Минор -самая красивая мечеть Ташкента' :
+     'Minor masjidi-Toshkentdagi eng gozal masjid'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_skver_sverxunoch.jfif" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+     'Вид на Сквер Ташкента ночью сверху' :
+     'Toshkent kochasining kechasi yuqoridan korinishi'">
+                </div>
+                <div class="carousel-item">
+                    <img src="/image/tashkent/slider/t_kukeldash.jpeg" class="d-block w-100"
+                         decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+                         'Медресе Кукельдаш':'Kukeldash Madrasasi'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<!-- ===== Mini facts ===== -->
+<section>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 reveal">
+                <div class="mini-card">В Ташкенте хранится Коран, являющийся самым древним в мире из сохранившихся полных рукописных мусхафов </div>
+            </div>
+            <div class="col-md-6 col-lg-6 reveal">
+                <div class="mini-card">Ташкент - родина Телевидения.В 1928 году 26 июля у Бориса Павловича Грабовского получилось
+                    осуществить передачу движущегося изображения на расстояние, используя электронно-лучевую трубку, которую он назвал телефот -
+                    это один из первых в мире рабочих образцов электронного телевидения</div>
+            </div>
+            <div class="col-md-6 col-lg-3 reveal">
+                <div class="mini-card">Население Ташкента 3 млн человек(3-е место в СНГ после Москвы и Санкт-Петербурга)</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- ===== Timeline ===== -->
+<section>
+    <div class="container reveal">
+        <div class="timeline row g-4 align-items-center">
+            <div class="col-md-3">
+                <button class="year-btn active" data-text=
+                        "1865 год — Ташкент становится столицей Туркестанского генерал-губернаторства,
+                         как политический,военный и научный центр Средней Азии. Из Ташкента управлялись территории современного:
+                         Узбекистана,Казахстана,Кыргызстана,Таджикистана и Туркменистана;">1865</button>
+                <button class="year-btn" data-text=
+                        "1924 год —Образована Узбекская ССР, а Ташкент становится ее столицей ">1924</button>
+                <button class="year-btn" data-text=
+                        "1966 год — в Ташкенте произошло разрушительное землетрясение с максимальной магнитудой 8 балов.
+                        80% города повреждено, оно стало одним из самых  крупных в истории страны по уровню разрушения в городской застройки.
+                        Начинается полное восстановление и модернизация. На помощь пришли все народы СССР.
+                        Ташкент был заново спланирован в концепции 'город-сад' и отстроен практически с нуля.
+                        Начались строительства таких мега проектов как Дворец дружбы народов, Ташкентский Цирк, Гостиница UZBEKISTAN,РОССИЯ,
+                        МОСКВА,Многоэтажка ЖЕМЧУГ,Ташкентский Метрополитен и др... ">1966</button>
+                <button class="year-btn" data-text=
+                        "1977 -было завершено строительство первой линии Ташкентского метро.
+                        Ташкентское метро до 2011 года оставалась единственным метро во всей Центральной Азии">1977</button>
+                <button class="year-btn" data-text=
+                        "1984 -было завершено строительство Ташкентской телебашни( 375 метров).Она стала первой телебашней в СССР,
+                         которая была построена в сейсмической зоне,а ее трехгранная конструкция стала инженерным вызовом для телевышки.
+                         Она стала второй телевышкой в СССР по высоте. И до сих пор она является самой высокой телевышкой Центральной Азии. ">1984</button>
+                <button class="year-btn" data-text=
+                        "1992 - произошел митинг студентов в студенческом городке ТашГУ, вызванных с резким подорожанием продуктов питания">1992</button>
+                <button class="year-btn" data-text=
+                        "1999 - произошли серия террористических взрывов в центре  города ">1999</button>
+            </div>
+            <div class="col-md-9">
+                <p id="yearText" class="fs-5">
+                    Хронология важных дат..
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ===== Zones ===== -->
+<section>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4 reveal">
+                <a href="/${lang}/uzbekistan/tashkent">
+                    <div class="zone">
+                        <img src="/image/tashkent/part/t_amirsoy.webp"
+                             decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+                         'Amirsoy-лучший горнолыжный курорт Центральной Азии':'Amirsoy-Markaziy Osiyodagi eng yaxshi changi kurorti'">
+                        <div class="zone-title">Amirsoy</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 reveal">
+                <a th:href="@{/{lang}/uzbekistan/tashkent(lang=${lang})}">
+                    <div class="zone">
+                        <img src="/image/tashkent/part/t_parkent.jpg"
+                             decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+                         'Горы Паркент':'Parkent Toglari'">
+                        <div class="zone-title">Parkent</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 reveal">
+                <a th:href="@{/{lang}/uzbekistan/tashkent(lang=${lang})}">
+                    <div class="zone">
+                        <img src="/image/tashkent/part/t_charvak.webp"
+                             decoding="async" loading="lazy" th:alt="${#locale.language == 'ru'} ?
+                         'Водохранилища Чарвак':'Charvak Suv Omborlari'">
+                        <div class="zone-title">Charvak</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section th:if="${articles.size() >= 3}">
+    <div class="container">
+        <h2 class="mb-5 reveal">
+            Статьи о <span class="accent">Ташкенте</span>
+        </h2>
+
+        <div class="articles-grid">
+            <a th:each="article : ${articles}"
+               th:href="@{/{lang}/article/{slug}(lang=${lang}, slug=${article.slug})}"
+               class="article-card reveal">
+
+                <div class="article-image">
+                    <img th:src="@{/uploads/images/{name}(name=${article.coverName})}"
+                         th:style="'object-fit: cover; object-position: ' + ${article.coverPosition} + ';'"
+                         decoding="async" loading="lazy" th:alt="${article.altCover}"/>
+                </div>
+
+                <div class="article-overlay"></div>
+
+                <h5 class="article-title"
+                    th:text="${article.title}">
+                </h5>
+
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script th:src="@{/js/components/swapper.js}"></script>
+<script th:src="@{/js/components/dynamicScroll.js}"></script>
+<script th:src="@{/js/pages/tashkent.js}"></script>
+
+
+</body>
+</html>

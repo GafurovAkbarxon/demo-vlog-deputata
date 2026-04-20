@@ -1,0 +1,22 @@
+<th th:fragment="sort(title, field, filter)">
+    <a th:with="
+            isActive=${filter.sort == field},
+            nextDir=${isActive and filter.dir.name() == 'ASC' ? 'DESC' : 'ASC'}
+        "
+       th:href="@{/ru/admin/users/login-events(
+            ${filter.toParams()},
+            page=0,
+            sort=${field},
+            dir=${nextDir}
+       )}"
+       class="sort-link">
+
+        <span th:text="${title}"></span>
+
+        <span th:if="${isActive}">
+            <span th:if="${filter.dir.name() == 'ASC'}">▲</span>
+            <span th:if="${filter.dir.name() == 'DESC'}">▼</span>
+        </span>
+
+    </a>
+</th>

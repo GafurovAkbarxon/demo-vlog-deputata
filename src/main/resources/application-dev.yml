@@ -1,0 +1,57 @@
+
+server:
+  port: 8081
+
+spring:
+  security:
+    remember-me:
+      key: ${REMEMBER_ME_KEY}
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: email, profile
+
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    show-sql: true   #Печатает SQL в лог
+    properties:
+      hibernate:
+        format_sql: true   #Красиво форматирует SQL в логах.
+        jdbc.lob.non_contextual_creation: true
+
+  sql:
+    init:
+      platform: postgres
+      mode: always
+
+logging:
+  level: #Пишет все SQL запросы и параметры.
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+app:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+  totp:
+    encKey: ${TOTP_KEY}
+turnstile:
+  siteKey: 1x00000000000000000000AA
+  secret: 1x0000000000000000000000000000000AA
+
+site:
+  baseUrl: http://localhost:8081
+  hostname: example.com
+
+
+

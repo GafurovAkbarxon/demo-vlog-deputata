@@ -1,0 +1,169 @@
+.welcome{
+    font-family: "Montserrat", serif;
+
+}
+
+/* Контейнер Swiper coverflow */
+.myCoverflow {
+    width: 100%;           /* Занимает всю ширину родителя */
+    height: 380px;         /* Высота блока карусели (не слишком высокая) */
+    padding-top: 30px;     /* Отступ сверху, чтобы слайды "дышали" */
+    padding-bottom: 30px;  /* Отступ снизу */
+}
+
+/* Каждый слайд внутри Swiper */
+.myCoverflow .swiper-slide {
+    display: flex;             /* Используем flex для выравнивания содержимого */
+    justify-content: center;   /* Центрируем по горизонтали */
+    align-items: center;       /* Центрируем по вертикали */
+
+    width: 240px;              /* Ширина карточки */
+    height: 320px;             /* Высота карточки */
+
+    border-radius: 20px;       /* Скруглённые углы карточки */
+    overflow: hidden;          /* Обрезаем всё, что выходит за границы скругления */
+    background: #f0f0f0;      /* Цвет фона карточки (светлый для контраста с тенью) */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15); /* Мягкая тень для "воздушности" */
+}
+
+/* Изображение внутри слайда */
+.myCoverflow .swiper-slide img {
+    width: 100%;           /* Картинка растягивается по ширине карточки */
+    height: 100%;          /* Картинка растягивается по высоте карточки */
+    object-fit: cover;     /* Картинка сохраняет пропорции и обрезается по краям */
+}
+
+/* 📱 Настройки для мобильных устройств */
+@media (max-width: 576px) {
+    .myCoverflow {
+        height: 300px;     /* Высота карусели меньше на телефоне */
+    }
+    .myCoverflow .swiper-slide {
+        width: 180px;      /* Карточки уже на мобильном */
+        height: 240px;     /* Карточки ниже, чтобы помещались в экран */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+.article-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.35);
+    outline: 2px solid rgba(246,200,76,.8);
+}
+.article-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: contrast(1.03) saturate(1.05);
+}
+.article-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            to top,
+            rgba(0,0,0,.25) 20%,
+            rgba(0,0,0,.10) 50%,
+            transparent 75%
+    );
+    transition: background .3s ease;
+}
+
+.article-card:hover .article-overlay {
+    background: linear-gradient(
+            to top,
+            rgba(0,0,0,.55) 30%,
+            rgba(0,0,0,.25) 55%,
+            transparent 75%
+    );
+}
+.article-title {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+    line-height: 1.4;
+
+    z-index: 2;
+    transition: color .3s ease, text-decoration .3s ease, text-shadow .3s ease;
+}
+
+.article-card:hover .article-title {
+    color: #f6c84c;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-shadow:
+            -1px -1px 0 #fff,
+            1px -1px 0 #fff,
+            -1px  1px 0 #fff,
+            1px  1px 0 #fff;
+}
+
+
+
+
+
+
+
+
+.swiper-title-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 16px;
+}
+
+.swiper-title-link {
+    position: relative;
+    font-weight: 700;
+    font-size: clamp(18px, 2.5vw, 26px);
+    color: #f6c84c;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.swiper-title-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.2s ease;
+}
+
+.swiper-title-link:hover {
+    transform: scale(1.05);
+}
+
+.swiper-title-link:hover::after {
+    width: 100%;
+}

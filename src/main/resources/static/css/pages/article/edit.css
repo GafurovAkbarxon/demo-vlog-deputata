@@ -1,0 +1,134 @@
+/* заголовок */
+.big-title {
+    color: #EAF6FF;                                    /* цвет текста */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.85);/* белая обводка */
+    text-shadow:                                       /* глубина */
+            0 0 12px rgba(180, 220, 255, 0.35),
+            0 6px 24px rgba(0, 40, 80, 0.4);
+}
+/* блоки */
+.block {
+    transition: box-shadow .2s, transform .2s;/* при их изменении плавно анимируй изменения за 0.2 секунды» */
+    background: var(--bg-main);                      /* фон */
+    color: #e5e7eb;                           /* цвет текста */
+    user-select: text;
+}
+
+.block:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);/* тень
+                                                    0 — смещение по горизонтали / 10px — смещение по вертикали (тень ниже элемента)
+                                                    30px — размытие тени (чем больше — тем мягче)/ rgba(0,0,0,.08) — цвет тени с прозрачностью 8% (очень лёгкая тень)*/
+    transform: translateY(-2px);            /* элемент вверх на 2 пикселя */
+}
+/* первью внешний вид статьи */
+.preview-card {
+    border-radius: 18px;                    /* закругление  углов рамки */
+    overflow: hidden;                       /* всё, что выходит за пределы блока, не показывается.*/
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);/* тень*/
+}
+/* обложка статьи */
+#articleCardCover {
+    width: 100%;
+    height: 300px;           /* фиксированная высота */
+    object-fit: cover;       /* обрезка по центру, сохраняем пропорции */
+    border-radius: 18px 18px 0 0;
+    display: block;
+}
+
+/* картинки внутри блоков */
+.image-preview {
+    width: 100%;
+    max-width: 400px;        /* можно менять под дизайн */
+    height: 300px;
+    object-fit: cover;       /* обрезаем лишнее */
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/*текстовый блок*/
+.editor-text {
+    background: #fff;       /* фон */
+    color: #111;            /* цвет текст */
+    font-size: 1rem;        /* размер текста */
+    min-height: 50px;       /* мин высота */
+    border: 1px solid #ddd; /* рамка*/
+    border-radius: 6px;     /* закругление углов рамки */
+    padding: 6px;           /* отступ */
+    outline: none;          /* убираем обводку при фокусе */
+}
+
+.editor-text:focus {
+    border-color: #3b82f6;                      /* цвет рамки при фокусе */
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.2); /* тень */
+}
+/* цитата блок */
+.block-quote {
+    background: #fef3c7;             /* фон светлый желтый */
+    border-left: 8px solid royalblue;;/* рамка слева- оранжевая полоса слева */
+    border-radius: 4px;              /* закругление углов рамки */
+    padding: 8px 12px;               /* отступ */
+    margin-bottom: 8px;              /* отступ снизу */
+    font-style: italic;              /* шрифт текста*/
+    font-weight: bold;               /* жирный текст */
+    font-size: 1.1rem;               /* чуть больше размера текста */
+    color: #3b82f6;                  /* цвет текста */
+    min-height: 50px;                /* мин высота */
+    resize: vertical;                /* если textarea, можно растягивать */
+}
+/* кнопки кастомизации текста в текстовом блоке*/
+.toolbar button {
+    background: #f0f4ff;                       /* цвет фона */
+    border: 1px solid #cbd5e1;                 /* рамка */
+    border-radius: 4px;                        /* закругление углов рамки*/
+    padding: 4px 8px;                          /* отступ */
+    margin-right: 4px;                         /* отступ справа */
+    cursor: pointer;                           /* курсор преврашается в руку */
+    font-weight: bold;                         /* толщина текста - толстая */
+    transition: background .2s, transform .2s; /* плавность */
+}
+
+.toolbar button:hover {
+    background: #3b82f6; /* фон */
+    color: #fff; /* цвет текста */
+    transform: translateY(-1px); /* элемент вверх на 1 пикселя */
+}
+
+.block-drag-handle {
+    cursor: grab;
+    user-select: none;
+}
+
+.cover-preview-wrapper {
+    position: relative;
+    width: 100%;
+    height: 300px; /* как и у #articleCardCover */
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+    cursor: grab;
+    background: #000;
+}
+
+.cover-preview-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    transition: object-position 0.2s;
+}
+
+
+
+.select2-container--default .select2-results__option {
+    color: #111;
+    background: #fff;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    color: #fff;
+    background: #0d6efd;
+}

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:with="lang=${#locale.language}">
+
+<head>
+    <title th:text="#{myFavoriteArticles}"></title>
+
+    <th:block th:insert="fragments/assets/style_links :: css"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}"/>
+
+    <style>
+        :root { --accent:#f6c84c; }
+
+        body{
+            background: linear-gradient(90deg,#1b2c55,#3d85a9,#63cac8,#b8edff);
+            color:#fff;
+            padding-top: 90px; /* если header fixed */
+        }
+
+        .glass-card{
+            background: rgba(0,0,0,.18);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.16);
+        }
+
+        .accent{ color: var(--accent); }
+
+        /* Сетка: на мобиле 2 в ряд */
+        .fav-grid{
+            /* Bootstrap row-cols-* даёт 1 на xs, поэтому тут принудим 2 */
+        }
+        @media (max-width: 575.98px){
+            .fav-grid > .col{ flex: 0 0 50%; max-width: 50%; }
+        }
+
+        .article-card {
+            position: relative;
+            height: 320px;
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,.25);
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+        @media (max-width: 768px) {
+            .article-card {
+                height: 260px;       /* mobile */
+            }
+        }
+
+
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,.35);
+            outline: 2px solid rgba(246,200,76,.8);
+        }
+
+        /* КАРТИНКА — 100% */
+        .article-cover {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ЗАТЕМНЕНИЕ СНИЗУ */
+        .article-overlay {
+            background: linear-gradient(
+                    to top,
+                    rgba(0,0,0,.65) 30%,
+                    rgba(0,0,0,.25) 55%,
+                    transparent 75%
+            );
+        }
+
+
+        .article-card:hover .article-overlay {
+            background: linear-gradient(
+                    to top,
+                    rgba(0,0,0,.70) 30%,
+                    rgba(0,0,0,.25) 55%,
+                    transparent 75%
+            );
+        }
+
+        /* ЗАГОЛОВОК */
+        .article-title {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            text-align: center;
+
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: .3px;
+            line-height: 1.4;
+
+            z-index: 2;
+            transition: color .3s ease, text-decoration .3s ease, text-shadow .3s ease;
+        }
+
+        .article-card:hover .article-title {
+            color: #f6c84c;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+
+            /* белая обводка */
+            text-shadow:
+                    -1px -1px 0 #fff,
+                    1px -1px 0 #fff,
+                    -1px  1px 0 #fff,
+                    1px  1px 0 #fff;
+        }
+
+        /* КНОПКИ */
+        .article-actions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 6px;
+            z-index: 3;
+        }
+
+        .article-actions a,
+        .article-actions button {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.4);
+
+            background: rgba(0,0,0,.45);
+            color: #fff;
+            font-size: 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+            transition: all .2s ease;
+        }
+
+
+
+        .btn-delete:hover {
+            background: #dc3545;   /* красный */
+            color: #fff;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+<div th:replace="~{fragments/header :: search}"></div>
+
+<main class="container my-4">
+    <div class="p-4 rounded-4 glass-card">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+            <div>
+                <h2 class="mb-1"
+                    th:text="#{myFavoriteArticles}">
+                </h2>
+            </div>
+
+            <a class="btn btn-outline-light btn-sm"
+               th:href="@{/{lang}/article/all(lang=${lang})}"
+               th:text="#{allArticles}">
+            </a>
+        </div>
+
+        <hr class="border-light opacity-25">
+
+        <div th:if="${#lists.isEmpty(all)}" class="text-center py-5">
+            <h5 class="fw-semibold"
+                th:text="#{myFavoriteEmpty}">
+            </h5>
+            <p class="opacity-75 mb-0"
+               th:text="#{howSave}">
+                </p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(all)}"
+             class="row">
+
+            <div class="col-6 col-md-4 col-lg-3  d-flex" th:each="t : ${all}">
+                <div class="article-card mb-3 mt-3">
+
+                    <a th:href="@{/{lang}/article/{slug}(lang=${lang}, slug=${t.slug})}" class="article-link">
+                        <img th:src="@{/uploads/images/{name}(name=${t.coverName})}"
+                             th:alt="${t.altCover}"
+                             decoding="async"
+                             loading="lazy"
+                             class="article-cover"
+                             th:style="'object-fit: cover; object-position: ' + ${t.coverPosition} + ';'">
+
+                        <div class="article-overlay"></div>
+
+                        <h5 class="article-title" th:text="${t.title}"></h5>
+                    </a>
+
+                    <div class="article-actions">
+
+
+                        <form th:action="@{/{lang}/profile/favorite/delete(lang=${lang})}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="articleId" th:value="${t.articleId}">
+                            <input type="hidden" name="slug" th:value="${t.slug}">
+                            <button type="submit" class="btn-delete" th:title="#{cancel}">
+                                <i class="bi bi-bookmark-x-fill"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+
+</body>
+</html>

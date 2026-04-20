@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Подтверждение входа</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="googlebot" content="noindex, nofollow, noarchive">
+    <title>Админ — Статьи</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+
+
+    <style>
+
+
+        .card {
+            border-radius: 18px;
+        }
+
+        .lock-icon {
+            width: 56px;
+            height: 56px;
+            background: #0d6efd;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 16px;
+        }
+
+        .code-box {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .code-box input {
+            width: 48px;
+            height: 56px;
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .shake {
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .timer {
+            font-size: 0.9rem;
+        }
+
+        .lockout {
+            color: #dc3545;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+
+<main>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 420px; width: 100%;">
+
+<!--        <div class="lock-icon">🔐</div>-->
+
+        <div class="text-center mb-3">
+            <h3 class="fw-bold">Подтвердите вход</h3>
+            <p class="text-muted">
+                Введите код из приложения Google Authenticator
+            </p>
+        </div>
+
+
+
+        <!-- Форма -->
+        <form method="post" th:action="@{/auth/2fa/verify}" id="codeForm">
+
+            <div class="code-box mb-3" id="codeBox">
+                <input type="text" maxlength="1" inputmode="numeric">
+                <input type="text" maxlength="1" inputmode="numeric">
+                <input type="text" maxlength="1" inputmode="numeric">
+                <input type="text" maxlength="1" inputmode="numeric">
+                <input type="text" maxlength="1" inputmode="numeric">
+                <input type="text" maxlength="1" inputmode="numeric">
+            </div>
+
+            <!-- Скрытое поле -->
+            <input type="hidden" name="code" id="code">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button class="btn btn-primary w-100 fw-semibold">
+                Подтвердить вход
+            </button>
+        </form>
+
+        <!-- Таймер -->
+        <div class="text-center mt-3 timer text-muted">
+            Новый код через <span id="countdown">30</span> сек
+        </div>
+
+
+        <!-- Показ ошибок логина -->
+        <div th:if="${param.error}" class="alert alert-danger">
+            <span th:text="#{signInError}"></span>
+
+            <span th:if="${param.left}">
+                    <span th:text="#{signInLeft(${param.left[0]})}"></span>
+                </span>
+        </div>
+
+
+        <div th:if="${param.locked}" class="alert alert-danger"
+             th:text="#{sessionLocked}">
+        </div>
+        <div th:if="${param.expired}" class="alert alert-info"
+             th:text="#{sessionExpired}">
+        </div>
+    </div>
+</div>
+</main>
+<footer th:replace="fragments/footer ::footer"></footer>
+
+
+
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script>
+    const inputs = document.querySelectorAll('.code-box input');
+    const hiddenInput = document.getElementById('code');
+    const form = document.getElementById('codeForm');
+    const errorBox = document.getElementById('errorBox');
+
+    inputs[0].focus();
+
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/\D/, '');
+            if (input.value && index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Backspace' && !input.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+
+    form.addEventListener('submit', e => {
+        let code = '';
+        inputs.forEach(i => code += i.value);
+        if (code.length !== 6) {
+            e.preventDefault();
+            shake();
+            return;
+        }
+        hiddenInput.value = code;
+    });
+
+    function shake() {
+        const box = document.getElementById('codeBox');
+        box.classList.add('shake');
+        setTimeout(() => box.classList.remove('shake'), 400);
+    }
+
+    if (errorBox) {
+        shake();
+    }
+
+    // Таймер 30 сек
+    let seconds = 30;
+    const countdown = document.getElementById('countdown');
+
+    setInterval(() => {
+        seconds--;
+        if (seconds <= 0) seconds = 30;
+        countdown.textContent = seconds;
+    }, 1000);
+</script>
+
+</body>
+</html>

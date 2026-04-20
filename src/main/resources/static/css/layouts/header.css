@@ -1,0 +1,246 @@
+:root{
+    --accent: #f6c84c;                     /* основной акцентный цвет */
+    --glass-bg: rgba(255,255,255,0.12);    /* фон для стеклянных элементов */
+    --glass-border: rgba(255,255,255,0.18);/* граница для стекла */
+    --text-light: #ffffff;                 /* светлый текст */
+}
+
+/* тело — шрифт по умолчанию */
+
+/* ====== GLASS HEADER ====== */
+.glass-header {
+
+    backdrop-filter: blur(14px);                 /* размытие заднего фона */
+    background: linear-gradient(180deg,
+    rgba(255,255,255,0.06),
+    rgba(255,255,255,0.02));                     /* светлая стеклянная подложка */
+    border-bottom: 1px solid var(--glass-border);/* нижняя граница */
+    box-shadow: 0 6px 30px rgba(2,6,23,0.18);    /* тень под хедером */
+    color: var(--text-light);                    /* белый текст */
+}
+
+/* ====== NAV ELEMENTS ====== */
+.nav-link {
+    color: var(--text-light);           /* белый текст */
+    display: inline-flex;               /* ровняем текст + иконки */
+    align-items: center;                /* центровка по вертикали */
+    gap: 8px;                           /* расстояние между иконкой и текстом */
+    padding: 6px 8px;                   /* внутренние отступы */
+    border-radius: 8px;                 /* скругление */
+    transition:                         /* анимации при ховере */
+            transform .18s cubic-bezier(.2,.9,.3,1),
+            text-shadow .18s .02s;
+    transform-origin: center;           /* точка увеличения — центр */
+    font-weight: 500;                   /* средняя жирность текста */
+}
+
+.nav-link:hover {
+    transform: translateY(-3px) scale(1.06);
+    text-shadow:
+            0 8px 28px rgba(0,0,0,0.45),   /* основная тень */
+            0 2px 0 rgba(255,255,255,0.05);/* лёгкая подсветка */
+    color: #ffc107;                        /* опционально — яркая подсветка текста */
+}
+
+
+/* ===== ICONS ===== */
+.icon-btn {
+    font-size: 1.35rem;                /* размер иконки */
+    display: inline-block;             /* чтобы transform работал правильно */
+    line-height: 1;                    /* высота строки ровно по иконке */
+    color: var(--text-light);          /* белая иконка */
+    padding: 8px;                      /* внутр. отступ вокруг иконки */
+    border-radius: 10px;               /* скругление кнопки */
+    transition: transform .18s cubic-bezier(.2,.9,.3,1),
+    box-shadow .18s;                   /* анимации */
+    transform-origin: center;          /* увеличивается из центра */
+    background: transparent;           /* без фона по умолчанию */
+}
+
+/* эффект при наведении на иконку */
+.icon-btn:hover {
+    transform: translateY(-3px) scale(1.14); /* прыжок + увеличение */
+    box-shadow: 0 6px 18px rgba(2,6,23,0.28);/* тень под иконкой */
+    color: var(--accent);                    /* окраска в акцент */
+}
+
+
+/* скрываем стандартный bootstrap caret ▼ */
+.dropdown .dropdown-toggle::after {
+    display: none;                     /* убрать стрелочку */
+}
+
+/* выделение активной ссылки */
+.nav-link.active {
+    color: var(--accent);                    /* акцентный цвет */
+    text-shadow: 0 3px 12px rgba(0,0,0,0.3); /* мягкая тень */
+}
+
+/* ===== SEARCH FIELD ===== */
+#searchField {
+    width: 300px;                            /* базовая ширина */
+    max-width: 40vw;                         /* ограничение, чтобы не выходило за экран */
+    transition: width .18s ease,
+    box-shadow .18s ease;                    /* анимации */
+    border-radius: 12px;                     /* скругление */
+    padding: .45rem .7rem;                   /* отступы */
+    background: rgba(255,255,255,0.06);      /* стеклянный фон */
+    border: 1px solid rgba(255,255,255,0.06);/* лёгкая граница */
+    color: var(--text-light);                /* белый текст */
+}
+
+/* placeholder-текст */
+#searchField::placeholder {
+    color: rgba(255,255,255,0.6);      /* светло-белый */
+}
+
+/* при фокусе увеличиваем ширину и усиливаем тень */
+#searchField:focus {
+    outline: none;                           /* убрать синюю рамку */
+    width: 380px;                            /* больше ширина */
+    box-shadow: 0 8px 28px rgba(2,6,23,0.28);/* яркая тень */
+    background: rgba(255,255,255,0.08);      /* чуть ярче фон */
+}
+
+/* ===== GLASS DROPDOWN MENU ===== */
+.dropdown-menu.glass {
+    backdrop-filter: blur(10px);             /* стеклянное размытие */
+    background: linear-gradient(180deg,
+    rgba(255,255,255,0.06),
+    rgba(255,255,255,0.03));                 /* стеклянный фон */
+    border: 1px solid rgba(255,255,255,0.08);/* граница */
+    color: #0b1220;                          /* тёмный текст внутри меню */
+}
+
+/* кнопка фильтров возле поиска */
+.filter-btn {
+    margin-left: .5rem;                /* отступ слева */
+    font-size: .9rem;                  /* небольшой текст */
+    padding: .35rem .6rem;             /* внутр. отступы */
+    border-radius: 10px;               /* скругление */
+    background: rgba(255,255,255,0.03);/* стеклянный фон */
+    color: var(--text-light);          /* белый текст */
+    border: 1px solid rgba(255,255,255,0.04); /* тонкая граница */
+}
+
+/* hover эффект для кнопки фильтров */
+.filter-btn:hover {
+    transform: translateY(-2px) scale(1.04); /* лёгкий прыжок */
+    box-shadow: 0 6px 18px rgba(2,6,23,0.25);/* тень */
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 991px){
+    #searchField {
+        display:none;                  /* скрываем десктоп-поиск на телефоне */
+    }
+}
+
+
+.dropdown-menu.glass .dropdown-item {
+    color: #ffffff;       /* белый цвет текста */
+}
+.dropdown-menu.glass .dropdown-item:hover {
+    color: black;       /* белый цвет текста */
+}
+
+
+
+
+
+
+.header-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 1rem;
+}
+
+.header-nav{
+    display:flex;
+    align-items:center;
+    gap:1.2rem;
+    list-style:none;
+    margin:0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ===== SEARCH MODAL GLASS STYLE ===== */
+#searchModal .modal-content {
+    backdrop-filter: blur(18px);
+    background: linear-gradient(180deg,
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.04));
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    color: #fff;
+}
+
+/* Заголовок */
+#searchModal .modal-title {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Инпуты внутри */
+#searchModal .form-control,
+#searchModal .form-select {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #fff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    transition: all .2s ease;
+}
+
+/* placeholder */
+#searchModal .form-control::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+/* focus эффект */
+#searchModal .form-control:focus,
+#searchModal .form-select:focus {
+    background: rgba(255,255,255,0.09);
+    box-shadow: 0 0 0 2px rgba(246,200,76,0.4);
+    border-color: var(--accent);
+}
+
+/* option фон (где поддерживается) */
+#searchModal select option {
+    background: #1b1f27;
+    color: #fff;
+}
+
+/* Кнопка "Искать" */
+#mobileSearchBtn {
+    border-radius: 14px;
+    font-weight: 600;
+    padding: 10px;
+    box-shadow: 0 6px 20px rgba(246,200,76,0.35);
+    transition: all .2s ease;
+}
+
+#mobileSearchBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(246,200,76,0.5);
+}
+
+/* Затемнение фона */
+.modal-backdrop.show {
+    background: rgba(5,10,20,0.75);
+    backdrop-filter: blur(6px);
+}
+
+

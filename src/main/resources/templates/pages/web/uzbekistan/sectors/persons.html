@@ -1,0 +1,650 @@
+<html th:with="lang=${#locale.language}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title th:text="#{persons}"></title>
+
+    <th:block th:insert="fragments/assets/style_links :: css"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}"/>
+    <style>
+
+    .vd-elFilterBtn {
+        background: rgba(255, 255, 255, .08);
+        border: 1px solid rgba(255, 255, 255, .18);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        }
+
+    .vd-filterStack {
+        background: rgba(255, 255, 255, .08); /*размывает то, что позади блока (эффект матового стекла).*/
+        border: 1px solid rgba(255, 255, 255, .18); /*полупрозрачный белый фон (эффект “стекла”)*/
+        backdrop-filter: blur(12px); /*размывает то, что позади блока (эффект матового стекла).*/
+        border-radius: 1rem; /*закругление углов*/
+        -webkit-backdrop-filter: blur(12px); /*тоже самое для Safari*/
+    }
+
+
+    /*тёмный полупрозрачный фон для элементов фильтра*/
+    .vd-filterStack .form-control,
+    .vd-filterStack .form-select {
+        background: rgba(0, 0, 0, .25);
+        border: 1px solid rgba(255, 255, 255, .18);
+        color: #fff;
+    }
+
+    .vd-filterStack .form-control::placeholder {
+        color: rgba(255, 255, 255, .72);
+    }
+
+    .vd-filterStack .form-control:focus,
+    .vd-filterStack .form-select:focus {
+        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+        border-color: rgba(13, 110, 253, .55);
+    }
+
+    .vd-filterStack .form-select option {
+        background: #ffffff;
+        color: #111111;
+    }
+
+
+
+
+
+    /* ===== PERSON CARD ===== */
+    .vd-personCard{
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        perspective: 1100px;
+    }
+
+    .vd-personCard__inner{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 520ms ease;
+        transform-style: preserve-3d;
+        border-radius: 18px;
+    }
+
+    .vd-personCard.is-flipped .vd-personCard__inner{
+        transform: rotateY(180deg);
+    }
+
+    .vd-personCard__face{
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        backface-visibility: hidden;
+        border: 1px solid rgba(255,255,255,.22);
+    }
+
+    .vd-personCard__front{
+        background: transparent;
+    }
+
+    .vd-personCard__back{
+        transform: rotateY(180deg);
+        background: linear-gradient(90deg, #1b2c55,#3d85a9,#63cac8,#b8edff);
+        padding: 12px;
+    }
+
+    /* image covers full front */
+    .vd-personCard__img{
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    @media (hover: hover){
+        .vd-personCard__inner:hover{
+            transform: translateY(-3px);
+        }
+        .vd-personCard.is-flipped .vd-personCard__inner:hover{
+            transform: rotateY(180deg) translateY(-3px);
+        }
+    }
+
+
+    /* admin buttons */
+    .vd-personCard__admin{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        gap: 8px;
+        z-index: 3;
+    }
+
+    .vd-personCard__adminBtn{
+        border-radius: 10px;
+        padding: .35rem .45rem;
+        line-height: 1;
+    }
+
+    /* bottom block on front */
+    .vd-personCard__bottom{
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        display: grid;
+        gap: 8px;
+        z-index: 2;
+    }
+
+    .vd-personCard__name{
+        font-weight: 800;
+        font-size: 1.05rem;
+        line-height: 1.15;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0,0,0,.25);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .vd-personCard__pills{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* transparent pill (NO dark overlay blocks) */
+    .vd-pill{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,.30);
+        background: rgba(255,255,255,.14);
+        color: #fff;
+        font-size: .86rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .vd-pill--danger{
+        background: rgba(220, 53, 69, .78);
+        border-color: rgba(255,255,255,.22);
+    }
+
+    /* back-side name + grid */
+    .vd-personCard__backName{
+        font-weight: 900;
+        font-size: 1.05rem;
+        line-height: 1.15;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0,0,0,.22);
+        margin-bottom: 10px;
+    }
+
+    .vd-personCard__backGrid{
+        display: grid;
+        gap: 8px;
+        align-content: start;
+    }
+
+    /* labeled pill on back */
+    .vd-pillL{
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,.30);
+        background: rgba(255,255,255,.14);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .vd-pillL__label{
+        font-size: .78rem;
+        opacity: .9;
+        white-space: nowrap;
+    }
+
+    .vd-pillL__value{
+        font-size: .86rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .vd-pillL--link:hover{
+        text-decoration: none;
+        border-color: rgba(255,255,255,.55);
+    }
+
+    /* small screens: keep inner content within card */
+    @media (max-width: 576px){
+        .vd-personCard__name{ font-size: 1rem; }
+        .vd-pill{ font-size: .82rem; padding: 6px 9px; }
+        .vd-pillL__value{ font-size: .84rem; }
+    }
+
+
+
+
+
+    @media (max-width: 576px){
+
+        .vd-personCard__back{ overflow: hidden; }
+
+        /* базово: label сверху, value снизу */
+        .vd-pillL{
+            width: 100%;
+            min-width: 0;
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+
+            padding: 8px 10px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .vd-pillL__label{
+            width: 100%;
+            min-width: 0;
+            font-size: .72rem;
+            line-height: 1.05;
+            opacity: .9;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* все значения по умолчанию: 1 строка */
+        .vd-pillL__value{
+            width: 100%;
+            min-width: 0;
+            font-size: .80rem;
+            line-height: 1.15;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* DESCRIPTION: много строк + не ломаем карточку */
+        .vd-pillL--desc .vd-pillL__value{
+            white-space: normal;     /* разрешаем переносы */
+            overflow: auto;          /* если слишком длинно — прокрутка внутри овала */
+            text-overflow: clip;
+
+            max-height: 6.2em;       /* примерно 5–6 строк, можно увеличить/уменьшить */
+            padding-right: 4px;      /* чтобы скроллбар не прилипал к тексту */
+        }
+
+        /* чуть более приятный скролл на iOS */
+        .vd-pillL--desc .vd-pillL__value{
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+    </style>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+<!--внешние отсупы во вертикали-->
+<main class="container py-4">
+
+    <!-- d-flex - без него не работает(align, justify);-->
+    <!-- align-items-center - выравнивание по вертикали(без него их высота к друг другу не паралельна)-->
+    <!-- justify-content-between - расположить два элемента по краям-->
+    <!-- gap - отступ flex элементов к друг другу; my-3 - внутренний отступ по вертикали-->
+    <div class="d-flex align-items-center flex-wrap justify-content-between gap-2 my-3">
+        <h1 class="fw-bold m-0" th:text="#{persons}"></h1>
+        <div sec:authorize="hasRole('ADMIN')">
+            <a class="btn btn-primary px-4"
+               th:href="@{/{lang}/admin/wiki/persons/create(lang=${lang})}"
+               th:text="#{createPersons}">
+            </a>
+        </div>
+    </div>
+
+
+    <!--показывать только в мобильных экранах-->
+    <div class="d-md-none mb-2">
+        <button class="btn btn-outline-light w-100 vd-elFilterBtn" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#personFilters"
+                aria-expanded="false"
+                aria-controls="personFilters">
+            <!-- включить анимацию коллапс раскрытия-->
+            <!-- сейчас закрыто не показывай-->
+            <!-- что будет раскрывать -->
+            <i class="bi bi-funnel"></i> <!-- иконка фильтра -->
+            <span th:text="#{filter}"></span>
+        </button>
+    </div>
+
+    <!-- collapse тип для мобилки; для больших экранов превратись в блок-->
+    <div id="personFilters" class="collapse d-md-block">
+        <form class="vd-filterStack p-3 " th:action="@{/{lang}/uzbekistan/persons(lang=${lang})}" th:object="${filter}" method="get">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{search}"></label>
+                    <input class="form-control" th:placeholder="#{name}" th:field="*{fullName}">
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{status}"></label>
+                    <select class="form-select" th:field="*{alive}">
+                        <option th:each="a : ${aliveFilters}"
+                                th:value="${a}"
+                                th:text="#{${a.code}}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{category}"></label>
+                    <select class="form-select" th:field="*{type}" id="filterPersonsType">
+                        <option value="" th:text="#{all}"></option>
+                        <option th:each="t : ${types}"
+                                th:value="${t}"
+                                th:text="#{${t.code}}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{city}"></label>
+                    <select class="form-select" th:field="*{birthPlace}">
+                        <option value="" th:text="#{all}"></option>
+                        <option th:each="p : ${places}"
+                                th:value="${p}"
+                                th:text="#{${p.code}}">
+                        </option>
+                    </select>
+                </div>
+
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{minAge}"></label>
+                    <input class="form-control" type="number" min="0" th:field="*{minAge}">
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{maxAge}"></label>
+                    <input class="form-control" type="number" min="0" th:field="*{maxAge}">
+                </div>
+
+
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{year}"></label>
+                    <input class="form-control" type="number" min="1" max="2100" th:field="*{bornYear}">
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{season}"></label>
+                    <select class="form-select" th:field="*{bornSeason}">
+                        <option value="" th:text="#{all}"></option>
+                        <option th:each="s : ${seasons}"
+                                th:value="${s}"
+                                th:text="#{${s.code}}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{month}"></label>
+                    <input class="form-control" type="number" min="1" max="12" th:field="*{bornMonth}">
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{zodiac}"></label>
+                    <select class="form-select" th:field="*{zodiac}">
+                        <option value="" th:text="#{all}"></option>
+                        <option th:each="z : ${zodiacs}"
+                                th:value="${z}"
+                                th:text="#{${z.code}}">
+                        </option>
+                    </select>
+                </div>
+
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{bornFrom}"></label>
+                    <input class="form-control" type="date" th:field="*{bornFrom}">
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <label class="form-label" th:text="#{bornTo}"></label>
+                    <input class="form-control" type="date" th:field="*{bornTo}">
+                </div>
+
+                <div class="col-12 col-md-3" id="fpSportTypeWrap">
+                    <label class="form-label" th:text="#{sportType}"></label>
+                    <select class="form-select" th:field="*{sportType}" id="fpSTSelected">
+                        <option value="" th:text="#{all}"></option>
+                        <option th:each="sp : ${sportTypes}"
+                                th:value="${sp}"
+                                th:text="#{${sp.code}}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3" id="fpSportStatusWrap">
+                    <label class="form-label" th:text="#{sportStatus}"></label>
+                    <select class="form-select" th:field="*{sportStatus}" id="fpSSSelected">
+                        <option value="" th:text="#{all}"></option>
+                        <option th:each="st : ${sportStatuses}"
+                                th:value="${st}"
+                                th:text="#{${st.code}}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3 d-flex gap-2">
+                    <button class="btn btn-primary w-100" type="submit"
+                            th:text="#{apply}">
+                    </button>
+                    <a class="btn btn-outline-light w-100" th:href="@{/{lang}/uzbekistan/persons(lang=${lang})}"
+                       th:text="#{reset}">
+                    </a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="row g-4">
+        <div class="col-6 col-md-4 col-lg-3" th:each="p : ${persons}">
+
+            <div class="vd-personCard" th:attr="data-person-id=${p.id}">
+                <div class="vd-personCard__inner">
+
+                    <!-- FRONT -->
+                    <div class="vd-personCard__face vd-personCard__front">
+
+                        <!-- full-cover image -->
+                        <img class="vd-personCard__img"
+                             th:src="@{/uploads/images/{name}(name=${p.imageFilename})}"
+                             th:alt="${p.alt}"/>
+
+                        <!-- admin buttons (top-right, only on front) -->
+                        <div class="vd-personCard__admin" sec:authorize="hasRole('ADMIN')">
+                            <a class="btn btn-sm btn-light vd-personCard__adminBtn"
+                               th:href="@{/ru/admin/wiki/persons/{id}/edit(id=${p.id})}"
+                               aria-label="Edit"
+                               title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form th:action="@{/ru/admin/wiki/persons/{id}/delete(id=${p.id})}"
+                                  method="post"
+                                  class="m-0">
+                                <button type="submit"
+                                        class="btn btn-sm btn-light vd-personCard__adminBtn"
+                                        aria-label="Delete"
+                                        title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- bottom content -->
+                        <div class="vd-personCard__bottom">
+                            <div class="vd-personCard__name" th:text="${p.name}"></div>
+
+                            <!-- row 1: type (+ sportType if athlete) -->
+                            <div class="vd-personCard__pills">
+                                <span class="vd-pill" th:text="#{${p.type.code}}"></span>
+
+                                <span class="vd-pill"
+                                      th:if="${p.type.name() == 'ATHLETE' and p.sportType != null}"
+                                      th:text="#{${p.sportType.code}}"></span>
+                            </div>
+
+                            <!-- row 2: birthPlace + age (or deathAge red) -->
+                            <div class="vd-personCard__pills">
+                                <span class="vd-pill" th:text="#{${p.birthPlace.code}}"></span>
+
+                                <span class="vd-pill"
+                                      th:if="${p.isAlive}"
+                                      th:text="${p.ageYears}"></span>
+
+                                <span class="vd-pill vd-pill--danger"
+                                      th:if="${!p.isAlive and p.deathAgeYears != null}"
+                                      th:text="${p.deathAgeYears}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BACK -->
+                    <div class="vd-personCard__face vd-personCard__back">
+
+                        <div class="vd-personCard__backName" th:text="${p.name}"></div>
+
+                        <div class="vd-personCard__backGrid">
+                            <div class="vd-pillL">
+                                <span class="vd-pillL__label" th:text="#{birthDatee}"></span>
+                                <span class="vd-pillL__value"
+                                      th:text="${p.birthDate}"></span>
+                            </div>
+
+                            <div class="vd-pillL">
+                                <span class="vd-pillL__label" th:text="#{zodiacc}"></span>
+                                <span class="vd-pillL__value" th:text="#{${p.zodiac.code}}"></span>
+                            </div>
+
+                            <div class="vd-pillL" th:if="${p.deathDate != null}">
+                                <span class="vd-pillL__label" th:text="#{deathDatee}"></span>
+                                <span class="vd-pillL__value" th:text="${p.deathDate}"></span>
+                            </div>
+
+                            <div class="vd-pillL"
+                                 th:if="${p.type.name() == 'ATHLETE' and p.sportStatus != null}">
+                                <span class="vd-pillL__label" th:text="#{sportStatuss}"></span>
+                                <span class="vd-pillL__value" th:text="#{${p.sportStatus.code}}"></span>
+                            </div>
+
+                            <div class="vd-pillL vd-pillL--desc" th:if="${p.description != null and !#strings.isEmpty(p.description)}">
+                                <span class="vd-pillL__label" th:text="#{descriptionn}"></span>
+                                <span class="vd-pillL__value" th:text="${p.description}"></span>
+                            </div>
+
+                            <a class="vd-pillL vd-pillL--link"
+                               th:if="${p.externalUrl != null and !#strings.isEmpty(p.externalUrl)}"
+                               th:href="${p.externalUrl}"
+                               target="_blank" rel="noopener">
+                                <span class="vd-pillL__label" th:text="#{openLink}"></span>
+                                <span class="vd-pillL__value" th:text="${p.externalUrl}"></span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12" th:if="${#lists.isEmpty(persons)}">
+            <div class="alert alert-info" th:text="#{persons.empty}"></div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+<script th:src="@{/js/layouts/header.js}"></script>
+
+<script>
+    /* ===================== FILTER: show sport fields only for ATHLETE ===================== */
+    const typeSelect = document.getElementById('filterPersonsType');
+    const sportTypeWrap = document.getElementById('fpSportTypeWrap');
+    const sportStatusWrap = document.getElementById('fpSportStatusWrap');
+    const sportTypeSelect = document.getElementById('fpSTSelected');
+    const sportStatusSelect = document.getElementById('fpSSSelected');
+    const isAthleteSelected = () => (typeSelect?.value || '').toUpperCase() === 'ATHLETE';
+    const syncSportVisibility = () => {
+        const show = isAthleteSelected();
+        if (sportTypeWrap) sportTypeWrap.style.display = show ? '' : 'none';
+        if (sportStatusWrap) sportStatusWrap.style.display = show ? '' : 'none';
+        if (!show) {
+            if (sportTypeSelect) sportTypeSelect.value = '';
+            if (sportStatusSelect) sportStatusSelect.value = '';
+        }
+    };
+    if (typeSelect) {
+        typeSelect.addEventListener('change', syncSportVisibility);
+        syncSportVisibility();
+    }
+
+
+
+    (function () {
+        const cards = document.querySelectorAll('.vd-personCard');
+
+        cards.forEach(card => {
+            // dblclick (desktop)
+            card.addEventListener('dblclick', (e) => {
+                // не переворачивать, если кликнули по кнопкам/ссылкам
+                if (e.target.closest('a,button,form')) return;
+                card.classList.toggle('is-flipped');
+            });
+
+            // double-tap (mobile)
+            let lastTap = 0;
+            card.addEventListener('touchstart', (e) => {
+                if (e.target.closest('a,button,form')) return;
+
+                const now = Date.now();
+                const delta = now - lastTap;
+                if (delta > 0 && delta < 320) {
+                    e.preventDefault();
+                    card.classList.toggle('is-flipped');
+                    lastTap = 0;
+                } else {
+                    lastTap = now;
+                }
+            }, { passive: false });
+
+            // stop flip when clicking admin controls
+            const admin = card.querySelector('.vd-personCard__admin');
+            if (admin) {
+                admin.addEventListener('click', (e) => e.stopPropagation());
+                admin.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+            }
+        });
+    })();
+
+
+
+
+</script>
+</body>
+</html>

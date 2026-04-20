@@ -1,0 +1,310 @@
+<header th:fragment="header" th:with="lang=${#locale.language}"
+        class="glass-header fixed-top py-2"
+        xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+
+        <!-- LOGO -->
+        <a th:href="@{/{lang}/home(lang=${lang})}" class="navbar-brand fw-bold text-white fs-4">
+             Vlog <span class="text-warning">Deputata</span>
+        </a>
+
+        <!-- гамбургер для мобилки -->
+        <button class="navbar-toggler border-0 text-white d-lg-none" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <i class="bi bi-list fs-1"></i>
+        </button>
+
+        <!-- NAV -->
+        <nav id="mainNav" class="collapse d-lg-flex">
+            <ul class="navbar-nav ms-lg-4 flex-lg-row align-items-center gap-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/{lang}/uzbekistan(lang=${lang})}" th:text="#{uzbekistan}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/{lang}/news(lang=${lang})}" th:text="#{news}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/{lang}/articles(lang=${lang})}" th:text="#{articles}"></a>
+                </li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/{lang}/problems(lang=${lang})}" th:text="#{problems}"></a>
+                </li>
+                <!-- <li class="nav-item"><a class="nav-link" href="/${lang}/ideas" th:text="#{header.ideas}">Идеи</a></li>-->
+
+                <!-- SEARCH (desktop) + FILTERS -->
+                <li class="nav-item d-none d-lg-flex align-items-center">
+                    <input id="searchField" data-locked="true" type="text" class="form-control" th:placeholder="#{searchByTitle}">
+                    <button id="filterToggle" class="filter-btn ms-2 nav-link" type="button" aria-expanded="false"
+                            th:text="#{filter}">
+                    </button>
+                </li>
+                <li class="nav-item dropdown d-none d-lg-block"  th:if="${disableLangSwitch == null or !disableLangSwitch}">
+                    <button class="btn btn-sm filter-btn  nav-link dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                         <span th:text="${lang.toUpperCase()}">RU</span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end glass">
+                        <li>
+                            <button class="dropdown-item d-flex align-items-center gap-2"
+                                    type="button"
+                                    onclick="changeLang('ru')">
+                                RU
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item d-flex align-items-center gap-2"
+                                    type="button"
+                                    onclick="changeLang('uz')">
+                                UZ
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <!-- mobile action icons -->
+                <li class="nav-item d-lg-none ms-auto">
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- search -->
+                        <button class="btn btn-link text-white p-0 nav-link" data-bs-toggle="modal"
+                                data-bs-target="#searchModal" aria-label="Открыть поиск">
+                            <i class="bi bi-search icon-btn"></i>
+                        </button>
+
+                        <!-- favorites -->
+                        <a class="nav-link p-0 text-white" sec:authorize="isAuthenticated()" th:href="@{/{lang}/profile/favorite/all(lang=${lang})}" title="Избранное">
+                            <i class="bi bi-heart-fill icon-btn"></i>
+                        </a>
+                        <div class="dropdown" th:if="${disableLangSwitch == null or !disableLangSwitch}">
+                            <button class="btn btn-link text-white p-0 dropdown-toggle"
+                                    data-bs-toggle="dropdown">
+                                <i class="bi bi-translate icon-btn"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end glass">
+                                <li><button class="dropdown-item" onclick="changeLang('ru')">RU</button></li>
+                                <li><button class="dropdown-item" onclick="changeLang('uz')">UZ</button></li>
+                            </ul>
+                        </div>
+                        <!-- profile -->
+                        <div class="dropdown">
+                            <button class="btn btn-link p-0 text-white dropdown-toggle" id="profileMenuBtn"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle icon-btn"></i>
+                            </button>
+
+                            <!-- только для гостей -->
+                            <ul class="dropdown-menu dropdown-menu-end glass" sec:authorize="isAnonymous()">
+                                <li>
+                                    <a class="dropdown-item" href="/auth/login"
+                                       th:text="#{signIn}">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/auth/register"
+                                       th:text="#{signUp}">
+
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- только для авторизованных пользователей -->
+                            <ul class="dropdown-menu dropdown-menu-end glass"
+                                sec:authorize="isAuthenticated() && hasRole('USER')">
+                                <li>
+                                    <a class="dropdown-item" href="/profile"
+                                       th:text="#{personalAccount}">
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" onclick="document.getElementById('logoutForm').submit(); return false;"
+                                       th:text="#{exit}">
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- только для админов -->
+                            <ul class="dropdown-menu dropdown-menu-end glass"
+                                sec:authorize="isAuthenticated() && hasRole('ADMIN')">
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/{lang}/article/all(lang=${lang})}"
+                                       th:text="#{controlPanel}">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/profile"
+                                       th:text="#{personalAccount}">
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" onclick="document.getElementById('logoutForm').submit(); return false;"
+                                       th:text="#{exit}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- desktop icons -->
+                <li class="nav-item d-none d-lg-flex align-items-center gap-3">
+                    <a class="nav-link p-0 text-white" sec:authorize="isAuthenticated()" th:href="@{/{lang}/profile/favorite/all(lang=${lang})}"
+                       th:title="#{favorites}"><i class="bi bi-heart-fill icon-btn"></i>
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 text-white dropdown-toggle" id="profileMenuBtnDesktop"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle icon-btn"></i>
+                        </button>
+
+
+                        <!-- только для гостей -->
+                        <ul class="dropdown-menu dropdown-menu-end glass" sec:authorize="isAnonymous()"
+                            aria-labelledby="profileMenuBtnDesktop">
+                            <li>
+                                <a class="dropdown-item" href="/auth/login"
+                                   th:text="#{signIn}">
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/auth/register"
+                                   th:text="#{signUp}">
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- только для авторизованных пользователей -->
+                        <ul class="dropdown-menu dropdown-menu-end glass"
+                            sec:authorize="isAuthenticated() && hasRole('USER')"
+                            aria-labelledby="profileMenuBtnDesktop">
+                            <li>
+                                <a class="dropdown-item" href="/profile"
+                                   th:text="#{personalAccount}">
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   onclick="document.getElementById('logoutForm').submit(); return false;"
+                                   th:text="#{exit}">
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- только для админов -->
+                        <ul class="dropdown-menu dropdown-menu-end glass"
+                            sec:authorize="isAuthenticated() && hasRole('ADMIN')"
+                            aria-labelledby="profileMenuBtnDesktop">
+                            <li>
+                                <a class="dropdown-item" th:href="@{/{lang}/article/all(lang=${lang})}"
+                                   th:text="#{controlPanel}">
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/profile"
+                                   th:text="#{personalAccount}">
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" onclick="document.getElementById('logoutForm').submit(); return false;"
+                                   th:text="#{exit}">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <form id="logoutForm" sec:authorize="isAuthenticated()"
+                  th:action="@{/logout}" method="post" style="display: none;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            </form>
+        </nav>
+    </div>
+
+
+    <!-- Небольшая панель фильтров, показ/скрыт по клику на filterToggle (desktop) -->
+    <div id="filterPanel" class="container-fluid" style="display:none; margin-top:8px;">
+        <div class="card p-3" style="background:rgba(255,255,255,0.04); border-radius:12px;">
+            <div class="d-flex gap-2 flex-wrap">
+
+                <select id="filterCategory" class="form-select form-select-sm" style="width:180px;">
+                    <option value="" th:text="#{allCategories}"></option>
+                    <option value="NEWS" th:text="#{news}"></option>
+                    <option value="ARTICLES" th:text="#{articles}"></option>
+                    <option value="PROBLEMS" th:text="#{problems}"></option>
+                    <option value="IDEAS" th:text="#{ideas}"></option>
+                </select>
+                <input id="searchTag" type="text" class="form-control" th:placeholder="#{searchByTag}">
+
+
+            <select id="filterSort" class="form-select form-select-sm" style="width:140px;">
+                    <option value="" th:text="#{sortBy}"></option>
+                    <option value="NEW" th:text="#{new}"></option>
+                    <option value="OLD" th:text="#{old}"></option>
+                    <option value="MOST_VIEWED" th:text="#{mostViewed}"></option>
+                    <option value="LEAST_VIEWED" th:text="#{leastViewed}"></option>
+                    <option value="MOST_COMMENTED" th:text="#{mostCommented}"></option>
+                    <option value="LEAST_COMMENTED" th:text="#{leastCommented}"></option>
+            </select>
+
+                <button id="applyFilters" class="btn btn-sm btn-warning"
+                        th:text="#{apply}">
+                </button>
+                <button id="clearFilters" class="btn btn-sm btn-outline-light"
+                        th:text="#{reset}">
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Search modal for mobile -->
+<div th:fragment="search" class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content glass p-3">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white" th:text="#{search}"></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <select id="mobileFilterCategory" class="form-select form-select-sm" style="width:180px;">
+                    <option value="" th:text="#{allCategories}"></option>
+                    <option value="NEWS" th:text="#{news}"></option>
+                    <option value="ARTICLES" th:text="#{articles}"></option>
+                    <option value="PROBLEMS" th:text="#{problems}"></option>
+                    <option value="IDEAS" th:text="#{ideas}"></option>
+                </select>
+                <input id="mobileSearchTag" type="text" class="form-control" th:placeholder="#{searchByTag}">
+                <input id="mobileSearchTitle" type="text" class="form-control" th:placeholder="#{searchByTitle}">
+
+
+                <select id="mobileFilterSort" class="form-select form-select-sm" style="width:140px;">
+                    <option value="" th:text="#{sortBy}"></option>
+                    <option value="NEW" th:text="#{new}"></option>
+                    <option value="OLD" th:text="#{old}"></option>
+                    <option value="MOST_VIEWED" th:text="#{mostViewed}"></option>
+                    <option value="LEAST_VIEWED" th:text="#{leastViewed}"></option>
+                    <option value="MOST_COMMENTED" th:text="#{mostCommented}"></option>
+                    <option value="LEAST_COMMENTED" th:text="#{leastCommented}"></option>
+                </select>
+            </div>
+            <div class="modal-footer border-0">
+                <button id="mobileSearchBtn" type="button" class="btn btn-warning w-100">Искать</button>
+            </div>
+        </div>
+    </div>
+</div>

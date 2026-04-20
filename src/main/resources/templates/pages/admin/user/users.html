@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" sec:authorize="hasRole('ADMIN')"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+
+    <title>Admin · Users</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(90deg, #1b2c55, #3d85a9, #63cac8, #b8edff);
+            color: #fff;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 1rem;
+            border: none;
+        }
+
+        .form-control, .form-select {
+            /*background: rgba(255,255,255,0.15);*/
+            color: #fff;
+            border: none;
+        }
+
+        .form-control::placeholder {
+            color: #ddd;
+        }
+
+        .table {
+            background: transparent !important;
+            color: #fff;
+            backdrop-filter: blur(6px);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .table td,
+        .table th {
+            background: transparent !important;
+            color: #fff;
+            border-color: rgba(255, 255, 255, .1);
+        }
+
+        .table thead {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .table-hover tbody tr:hover {
+            background: rgba(246, 200, 76, 0.15);
+        }
+
+        .btn-accent {
+            background: #f6c84c;
+            color: #000;
+            font-weight: 600;
+            border-radius: .75rem;
+            transition: all .2s ease;
+        }
+
+        .btn-accent:hover {
+            background: #ffd86b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(246, 200, 76, .4);
+        }
+
+        .badge-role {
+            background: rgba(246, 200, 76, .25);
+            color: #f6c84c;
+        }
+
+        .pagination .page-link {
+            background: rgba(0, 0, 0, .3);
+            color: #fff;
+            border: none;
+        }
+
+        .pagination .active .page-link {
+            background: #f6c84c;
+            color: #000;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, .3);
+            color: #fff;
+        }
+
+        .btn-icon:hover {
+            background: #f6c84c;
+            color: #000;
+            border-color: #f6c84c;
+        }
+
+        .table td a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .table td a:hover {
+            text-decoration: underline;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+
+        .badge-ok {
+            background: rgba(100, 255, 180, .2);
+            color: #7fffd4;
+        }
+
+        .badge-block {
+            background: rgba(255, 80, 80, .2);
+            color: #ff6b6b;
+        }
+
+
+        .table th a:hover {
+            text-decoration: underline;
+        }
+
+        .table th span {
+            font-size: 0.75rem;
+            margin-left: 4px;
+        }
+
+        .form-select {
+            /*background-color: rgba(0,0,0,.35);*/
+            color: #fff;
+        }
+
+        .form-select option {
+            background: white; /* тёмный */
+            color: black;
+        }
+
+        .form-select,
+        .form-control {
+            box-shadow: none !important;
+            background-color: rgba(0, 0, 0, 0.35);
+            color: #fff;
+            border: none;
+        }
+
+
+        .form-select:focus,
+        .form-control:focus {
+            box-shadow: none !important;
+            outline: none;
+        }
+        .sort-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .sort-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div th:replace="fragments/header :: search"></div>
+<main class="mt-5">
+
+<div class="container py-4">
+    <a href="/ru/admin/users/login-events"
+       class="d-inline-flex align-items-center justify-content-center
+          btn btn-accent mb-3 px-4 py-2 text-decoration-none fw-semibold"
+       style="border-radius: 0.75rem; transition: all .2s ease;">
+        <i class="bi bi-list-check me-2"></i> <!-- иконка Bootstrap Icons -->
+        Логин события
+    </a>
+    <h2 class="mb-4">Управление пользователями</h2>
+
+    <!-- 🔍 ФИЛЬТРЫ -->
+    <div class="card p-3 mb-4">
+        <form method="get" th:action="@{/ru/admin/users}" class="row g-3">
+            <div class="col-md-2">
+                <input class="form-control"
+                       name="id"
+                       placeholder="User ID"
+                       th:value="${filter.id}">
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" name="username"
+                       placeholder="Username"
+                       th:value="${filter.username}">
+            </div>
+
+            <div class="col-md-3">
+                <input class="form-control" name="email"
+                       placeholder="Email"
+                       th:value="${filter.email}">
+            </div>
+
+            <div class="col-md-2">
+                <select class="form-select" name="role">
+                    <option value="">Все роли</option>
+                    <option th:each="r : ${roles}"
+                            th:value="${r}"
+                            th:text="${r}"
+                            th:selected="${r == filter.role}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="provider">
+                    <option value="">Все провайдеры</option>
+                    <option th:each="r : ${providers}"
+                            th:value="${r}"
+                            th:text="${r}"
+                            th:selected="${r == filter.provider}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select class="form-select" name="blocked">
+                    <option value="">Все статусы</option>
+                    <option value="true" th:selected="${filter.blocked == true}">Заблокирован</option>
+                    <option value="false" th:selected="${filter.blocked == false}">Активен</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-accent">
+                    Фильтровать
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 📋 ТАБЛИЦА -->
+    <div class="card p-3">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>
+                        <a class="sort-link" th:href="@{/ru/admin/users(${filter.toParams()},page=0,
+                            sort='username',dir=${filter.sort == 'username' and filter.dir.name() == 'ASC' ? 'DESC' : 'ASC'})}">
+                            Username
+                            <i th:if="${filter.sort != 'username'}"
+                               class="bi bi-arrow-down-up opacity-50">
+                            </i>
+                            <i th:if="${filter.sort == 'username' and filter.dir.name() == 'ASC'}"
+                               class="bi bi-arrow-up">
+                            </i>
+                            <i th:if="${filter.sort == 'username' and filter.dir.name() == 'DESC'}"
+                               class="bi bi-arrow-down">
+                            </i>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-link" th:href="@{/ru/admin/users(${filter.toParams()},page=0,
+                           sort='email',dir=${filter.sort == 'email' and filter.dir.name() == 'ASC' ? 'DESC' : 'ASC'})}">
+                            Email
+                            <i th:if="${filter.sort != 'email'}"
+                               class="bi bi-arrow-down-up opacity-50">
+                            </i>
+                            <i th:if="${filter.sort == 'email' and filter.dir.name() == 'ASC'}"
+                               class="bi bi-arrow-up">
+                            </i>
+                            <i th:if="${filter.sort == 'email' and filter.dir.name() == 'DESC'}"
+                               class="bi bi-arrow-down">
+                            </i>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-link" th:href="@{/ru/admin/users(${filter.toParams()},page=0,
+                           sort='role',dir=${filter.sort == 'role' and filter.dir.name() == 'ASC' ? 'DESC' : 'ASC'})}">
+                            Роль
+                            <i th:if="${filter.sort != 'role'}"
+                               class="bi bi-arrow-down-up opacity-50">
+                            </i>
+                            <i th:if="${filter.sort == 'role' and filter.dir.name() == 'ASC'}"
+                               class="bi bi-arrow-up">
+                            </i>
+                            <i th:if="${filter.sort == 'role' and filter.dir.name() == 'DESC'}"
+                               class="bi bi-arrow-down">
+                            </i>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-link" th:href="@{/ru/admin/users(${filter.toParams()},page=0,
+                           sort='provider',dir=${filter.sort == 'provider' and filter.dir.name() == 'ASC' ? 'DESC' : 'ASC'})}">
+                            Провайдер
+                            <i th:if="${filter.sort != 'provider'}"
+                               class="bi bi-arrow-down-up opacity-50">
+                            </i>
+                            <i th:if="${filter.sort == 'provider' and filter.dir.name() == 'ASC'}"
+                               class="bi bi-arrow-up">
+                            </i>
+                            <i th:if="${filter.sort == 'provider' and filter.dir.name() == 'DESC'}"
+                               class="bi bi-arrow-down">
+                            </i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a class="sort-link" th:href="@{/ru/admin/users(${filter.toParams()},page=0,
+                           sort='blocked',dir=${filter.sort == 'blocked' and filter.dir.name() == 'ASC' ? 'DESC' : 'ASC'})}">
+                            Статус
+                            <i th:if="${filter.sort != 'blocked'}"
+                               class="bi bi-arrow-down-up opacity-50">
+                            </i>
+                            <i th:if="${filter.sort == 'blocked' and filter.dir.name() == 'ASC'}"
+                               class="bi bi-arrow-up">
+                            </i>
+                            <i th:if="${filter.sort == 'blocked' and filter.dir.name() == 'DESC'}"
+                               class="bi bi-arrow-down">
+                            </i>
+                        </a>
+                    </th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="u, iterStat : ${users.content}">
+                    <td>
+                        [[${users.number * users.size + iterStat.index + 1}]]
+                    </td>
+                    <td>
+                        [[${u.id}]]
+                    </td>
+                    <td>
+                        <a th:href="@{/ru/admin/users/{id}(id=${u.id})}">
+                            [[${u.username}]]
+                        </a>
+                    </td>
+                    <td>
+                        [[${u.email}]]
+                    </td>
+                    <td>
+                        <span th:if="${u.role.name() == 'ADMIN'}" class="text-success fw-semibold">
+                          ADMIN
+                        </span>
+                        <span th:if="${u.role.name() != 'ADMIN'}">
+                          [[${u.role}]]
+                        </span>
+                    </td>
+                    <td>
+                        [[${u.provider}]]
+                    </td>
+
+                    <td>
+                        <span class="badge bg-danger" th:if="${u.blocked}">
+                            BLOCK
+                        </span>
+                        <span class="badge bg-success" th:if="${!u.blocked}">
+                            OK
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <form th:if="${!u.blocked}"
+                              th:action="@{/ru/admin/users/{id}/block(id=${u.id})}"
+                              method="post" class="d-inline">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button class="btn-icon"><i class="bi bi-lock"></i></button>
+                        </form>
+                        <form th:if="${u.blocked}"
+                              th:action="@{/ru/admin/users/{id}/unblock(id=${u.id})}"
+                              method="post" class="d-inline">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button class="btn-icon"><i class="bi bi-unlock"></i></button>
+                        </form>
+
+                        <form th:action="@{/ru/admin/users/{id}/delete(id=${u.id})}"
+                              method="post" class="d-inline"
+                              onsubmit="return confirm('Удалить пользователя?')">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button class="btn-icon"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 📄 ПАГИНАЦИЯ -->
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${users.first}? 'disabled'">
+                <a class="page-link" th:href="@{/ru/admin/users(${filter.toParams()}, page=${users.number - 1})}">
+                    ←
+                </a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, users.totalPages-1)}" th:classappend="${i == users.number}? 'active'">
+                <a class="page-link" th:href="@{/ru/admin/users(${filter.toParams()}, page=${i})}">
+                    [[${i + 1}]]
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${users.last}? 'disabled'">
+                <a class="page-link" th:href="@{/ru/admin/users(${filter.toParams()}, page=${users.number + 1})}">
+                    →
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</main>
+<footer th:replace="fragments/footer ::footer"></footer>
+
+
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/layouts/header.js}"></script>
+<script>
+    document.querySelectorAll('form select')
+        .forEach(el =>
+            el.addEventListener('change', () => el.form.submit())
+        );
+
+    document.querySelectorAll('form input')
+        .forEach(el =>
+            el.addEventListener('keydown', e => {
+                if (e.key === 'Enter') el.form.submit();
+            })
+        );
+</script>
+</body>
+</html>

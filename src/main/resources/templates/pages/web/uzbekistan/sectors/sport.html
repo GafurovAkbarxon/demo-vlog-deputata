@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html th:with="lang=${#locale.language}">
+<head>
+    <title>Спорт Узбекистана</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/sport.css}" />
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+
+<!-- ===== BOXING ===== -->
+<section>
+    <h2 class="reveal">🥊 Узбекский <span>бокс</span></h2>
+
+    <div class="boxing">
+        <div class="boxer reveal">
+            <img src="/image/sport/bx_madrimov.jpg">
+            <div class="info">
+                <h4>Баходир Джалолов</h4>
+                <small>Сырдарья, 1994</small>
+                <p>Вес: Heavyweight</p>
+                <p>WBA #2 · WBC #1 · IBF #3 · WBO #2</p>
+            </div>
+        </div>
+
+        <div class="boxer reveal">
+            <img src="/image/sport/bx_murodjon2.jpeg">
+            <div class="info">
+                <h4>Муроджон Ахмадалиев</h4>
+                <small>Андижан, 1994</small>
+                <p>Вес: Super Bantam</p>
+                <p>WBA #1 · IBF #2</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ===== CHESS BANNER ===== -->
+<section class="chess-banner reveal">
+    <div class="banner-text">
+        <h3>♟ Шахматы — интеллект нации</h3>
+        <p>Узбекистан — мировая шахматная держава</p>
+    </div>
+    <img src="/image/sport/chess.webp">
+</section>
+<!-- ===== CHESS PLAYERS ===== -->
+<section>
+    <h2 class="reveal">♟ Легенды <span>шахмат</span></h2>
+
+    <div class="chess-grid">
+        <div class="chess-player reveal">
+            <img src="/image/sport/shx_nodirbek.jpg">
+            <h4>Нодирбек Абдусатторов</h4>
+            <small>Ташкент, 2004</small>
+            <span>FIDE #4</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ===== TENNIS ===== -->
+<section>
+    <h2 class="reveal">🎾 Узбекский <span>теннис</span></h2>
+
+    <div class="tennis">
+        <div class="tennis-card reveal">
+            <img src="/image/sport/bx_murodjon.jpg">
+            <div>
+                <h4>Денис Истомин</h4>
+                <small>Оренбург, 1986</small>
+                <p>ATP #102</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section th:if="${articles.size() >= 3}" class="container-fluid" >
+    <div class="swiper-title-wrapper">
+        <a th:href="@{/{lang}/article/all(lang=${lang})}" class="swiper-title-link" th:text="#{allArticles}">
+        </a>
+    </div>
+
+    <div class="swiper myCoverflow">
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide"
+                 th:each="article : ${articles}">
+
+                <!-- ТВОЯ КАРТОЧКА СТАТЬИ -->
+                <div class="article-card">
+
+                    <a th:href="@{/{lang}/article/{slug}(lang=${lang}, slug=${article.slug})}"
+                       class="article-link">
+
+                        <img class="article-cover"
+                             th:src="@{/uploads/images/{name}(name=${article.coverName})}"
+                             th:style="'object-fit: cover; object-position: ' + ${article.coverPosition} + ';'"
+                             alt="Обложка">
+
+                        <div class="article-overlay"></div>
+
+                        <h5 class="article-title"
+                            th:text="${article.title}">
+                            Заголовок
+                        </h5>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+
+<script th:src="@{/js/components/swapper.js}"></script>
+<script th:src="@{/js/components/dynamicScroll.js}"></script>
+<script th:src="@{/js/layouts/header.js}"></script>
+
+</body>
+</html>

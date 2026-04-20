@@ -1,0 +1,126 @@
+/* ===== BOXING ===== */
+.boxing{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:30px;
+}
+.boxer{
+    background:rgba(255,255,255,0.14);
+    border-radius:28px;
+    overflow:hidden;
+    transition:0.4s;
+}
+.boxer img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+}
+.boxer .info{
+    padding:16px;
+}
+.boxer:hover{
+    transform:translateY(-10px);
+    box-shadow:0 25px 45px rgba(0,0,0,0.4);
+}
+/* ====================================================== */
+/* ===== CHESS BANNER ===== */
+.chess-banner{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:30px;
+}
+.chess-banner img{
+    width:100%;
+    border-radius:30px;
+}
+.banner-text h3{
+    font-size:32px;
+}
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+    .chess-banner{
+        grid-template-columns:1fr;
+    }
+}
+
+/* желтый акцент для слов и рейтингов */
+.rank,
+.rating,
+.boxer p:last-child,
+.tennis-card p,
+.chess-player span{
+    color:var(--accent);
+    font-weight:600;
+}
+/* ========================== */
+/* ===== CHESS PLAYERS ===== */
+.chess-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,200px);
+    gap:30px;
+}
+.chess-player{
+    background:rgba(0,0,0,0.3);
+    padding:18px;
+    border-radius:18px;
+    text-align:center;
+}
+.chess-player img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:14px;
+}
+.chess-player span{
+    color:var(--accent);
+    font-weight:600;
+}
+/* ====================================================== */
+/* ===== TENNIS ===== */
+.tennis{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:30px;
+}
+
+/* планшет */
+@media(max-width:900px){
+    .tennis{
+        grid-template-columns:repeat(2, 1fr);
+    }
+}
+
+/* телефон */
+@media(max-width:520px){
+    .tennis{
+        grid-template-columns:1fr;
+    }
+}
+.tennis-card{
+    display:flex;
+    gap:16px;
+    background:rgba(255,255,255,0.12);
+    border-radius:20px;
+    padding:14px;
+    align-items:center;
+}
+
+.tennis-card img{
+    width:120px;
+    height:150px;
+    object-fit:cover;
+    border-radius:16px;
+}
+
+/* ====================================================== */
+section{
+    padding:90px 8%;
+}
+
+h2{
+    font-size:40px;
+}
+h2 span{color:var(--accent);}
+
+

@@ -1,0 +1,241 @@
+<html th:with="lang=${#locale.language}">
+<head>
+
+    <title>Uzbekistan — Экономика и Бизнес</title>
+    <th:block th:insert="fragments/assets/style_links :: css" />
+
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/layouts/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/swapper.css}" />
+    <link rel="stylesheet" th:href="@{/css/pages/economy.css}" />
+
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+    <div th:replace="fragments/header :: search"></div>
+
+
+<section>
+    <h1>Экономика <span>Узбекистана</span></h1>
+    <p class="section-sub">
+        Современные экономические индикаторы, ресурсы и стратегический потенциал страны
+    </p>
+
+    <div class="economy-grid">
+        <div class="econ-item">
+            <div class="econ-title">ВВП</div>
+            <div class="econ-value">ТОП-61</div>
+            <div class="econ-desc">$147 млрд [МВФ]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Население</div>
+            <div class="econ-value">38 млн</div>
+            <div class="econ-desc">Самая крупная демография региона. Потенциал рабочей силы  [stat.uz]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">ВВП на душу (ППС)</div>
+            <div class="econ-value">ТОП-125</div>
+            <div class="econ-desc">Страна в нижней половине мирового рейтинга. Доходы населения относительно невысокие  [МВФ]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Госдолг</div>
+            <div class="econ-value">$37.4 млрд</div>
+            <div class="econ-desc">25.4% ВВП(безопасный уровень)  [ЦБ РУ]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Валюта</div>
+            <div class="econ-value">ТОП-146</div>
+            <div class="econ-desc">из 150 валют в рейтинге самых слабых валют мира [Findexify]
+<!--                Плюсы: экспорт[конкурентоспособный] / Минусы: импорт[дороже,если страна больше импортирует это проблема],население [беднее в долларовом выражении]-->
+            </div>
+        </div>
+        <div class="econ-item">
+            <div class="econ-title">Торговый баланс</div>
+            <div class="econ-value">Отриц.</div>
+            <div class="econ-desc">Экспорт 33.8 млрд / Импорт 47.4 млрд</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Инфраструктура</div>
+            <div class="econ-value">ТОП-52</div>
+            <div class="econ-desc">Дороги, логистика, цифровизация  [GQII]</div>
+        </div>
+
+
+        <div class="econ-item">
+            <div class="econ-title">Золото</div>
+            <div class="econ-value">ТОП-4</div>
+            <div class="econ-desc">По запасам золота недрах.А по резервам ТОП-17</div>
+        </div>
+        <div class="econ-item">
+            <div class="econ-title">Уран</div>
+            <div class="econ-value">ТОП-9</div>
+            <div class="econ-desc">Это 2% от общих мировых запасов</div>
+        </div>
+        <div class="econ-item">
+            <div class="econ-title">Газ</div>
+            <div class="econ-value">ТОП-17</div>
+            <div class="econ-desc">По запасам газа</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Хлопок</div>
+            <div class="econ-value">ТОП-11</div>
+            <div class="econ-desc">по экспорту  [UN Comtrade]</div>
+        </div>
+
+
+        <div class="econ-item">
+            <div class="econ-title">Туризм</div>
+            <div class="econ-value">11.7 млн </div>
+            <div class="econ-desc">в год  [stat.uz]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Рейтинг по чистой миграции</div>
+            <div class="econ-value">Отриц.</div>
+            <div class="econ-desc">Количество уезжающих из страны, превышает количество въезжающих  [UN DESA]</div>
+        </div>
+
+        <div class="econ-item">
+            <div class="econ-title">Индекс свободы слова и полит. прав</div>
+            <div class="econ-value">12/100 БАЛ</div>
+            <div class="econ-desc">Относится к категории NOT FREE  [Freedom House]</div>
+        </div>
+        <div class="econ-item">
+            <div class="econ-title">Индекс защиты прав собственности и бизнеса</div>
+            <div class="econ-value">34/100 БАЛ</div>
+            <div class="econ-desc">Ниже среднего мирового показателя  [The Heritage Foundation]</div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="ranking">
+    <h2>🏛 ТОП-6 <span>госкомпаний</span></h2>
+    <div class="ranking-grid">
+        <div class="brand"><strong>Uzbekistan Airways</strong>Авиация</div>
+        <div class="brand"><strong>UzAuto</strong>Автопром</div>
+        <div class="brand"><strong>AGMK</strong>Медь</div>
+        <div class="brand"><strong>NGMK</strong>Золото</div>
+        <div class="brand"><strong>UzTelecom</strong>Телекоммуникация</div>
+        <div class="brand"><strong>UzInfocom</strong>IT-инфраструктура</div>
+    </div>
+</section>
+
+
+
+
+<section class="ranking">
+    <h2>🔥 ТОП-15 <span>брендов-лидеров</span></h2>
+    <div class="ranking-grid">
+        <div class="brand">Korzinka</div>
+        <div class="brand">Safia</div>
+        <div class="brand">Ermak</div>
+        <div class="brand">Click</div>
+        <div class="brand">OFB</div>
+        <div class="brand">Grandpharm</div>
+        <div class="brand">IBR</div>
+        <div class="brand">Amirsoy</div>
+        <div class="brand">AKFA</div>
+        <div class="brand">NMEDOV</div>
+        <div class="brand">FeedUp</div>
+        <div class="brand">Navruz International</div>
+        <div class="brand">EVOS</div>
+        <div class="brand">Uzum</div>
+        <div class="brand">Rizanova</div>
+    </div>
+</section>
+
+
+
+
+<section class="ranking">
+    <h2>🏦 ТОП-4 <span>частных гиганта связанных с государством</span></h2>
+    <div class="ranking-grid">
+        <div class="brand">Saber</div>
+        <div class="brand">Paynet</div>
+        <div class="brand">UzCard</div>
+        <div class="brand">Carvon</div>
+    </div>
+</section>
+
+
+
+
+<section class="ranking">
+    <h2>🚀 ТОП-13 <span>перспективных брендов</span></h2>
+    <div class="ranking-grid">
+        <div class="brand">Tahriкchi</div>
+        <div class="brand">MohirDev</div>
+        <div class="brand">Afisha Media</div>
+        <div class="brand">Asaxiy</div>
+        <div class="brand">Sharq</div>
+        <div class="brand">Magic Bot</div>
+        <div class="brand">Comfort Oil</div>
+        <div class="brand">Inter Nation</div>
+        <div class="brand">Oqtepa Lavash</div>
+        <div class="brand">MaxWay</div>
+        <div class="brand">Beshqozon</div>
+        <div class="brand">Coffelito</div>
+        <div class="brand">Bellissimo</div>
+    </div>
+</section>
+
+
+
+
+
+<section th:if="${articles.size() >= 3}" class="container-fluid" >
+    <div class="swiper-title-wrapper">
+        <a th:href="@{/{lang}/article/all(lang=${lang})}" class="swiper-title-link" th:text="#{allArticles}">
+        </a>
+    </div>
+
+    <div class="swiper myCoverflow">
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide"
+                 th:each="article : ${articles}">
+
+                <!-- ТВОЯ КАРТОЧКА СТАТЬИ -->
+                <div class="article-card">
+
+                    <a th:href="@{/{lang}/article/{slug}(lang=${lang}, slug=${article.slug})}"
+                       class="article-link">
+
+                        <img class="article-cover"
+                             th:src="@{/uploads/images/{name}(name=${article.coverName})}"
+                             th:style="'object-fit: cover; object-position: ' + ${article.coverPosition} + ';'"
+                             alt="Обложка">
+
+                        <div class="article-overlay"></div>
+
+                        <h5 class="article-title"
+                            th:text="${article.title}">
+                            Заголовок
+                        </h5>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer th:replace="fragments/footer ::footer"></footer>
+<th:block th:insert="fragments/assets/scrypt_links :: scrypt"/>
+
+<script th:src="@{/js/components/swapper.js}"></script>
+<script th:src="@{/js/layouts/header.js}"></script>
+
+</body>
+</html>

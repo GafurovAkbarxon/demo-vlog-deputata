@@ -1,0 +1,59 @@
+
+server:
+  port: 8081
+  forward-headers-strategy: framework
+spring:
+  security:
+    remember-me:
+      key: ${REMEMBER_ME_KEY}
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: email, profile
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false  #Печатает SQL в лог
+    properties:
+      hibernate:
+
+        jdbc.lob.non_contextual_creation: true
+
+  sql:
+    init:
+      platform: postgres
+      mode: never
+
+
+logging:
+  level: #Пишет все SQL запросы и параметры.
+    root: INFO
+
+app:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+  totp:
+    encKey: ${TOTP_KEY}
+
+
+
+
+turnstile:
+  siteKey: ${CAPTCHA_SITE_KEY}
+  secret: ${CAPTCHA_SITE_SECRET}
+
+site:
+  baseUrl: https://vlogdeputata.uz
+  hostname: vlogdeputata.uz

@@ -1,0 +1,113 @@
+
+h1, h2 {
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+h2 span {
+    color: #f6c84c;
+}
+
+section {
+    padding: 80px 8%;
+}
+
+
+
+.economy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.econ-item {
+    padding: 30px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    transition: 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.econ-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(246,200,76,0.3), transparent);
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.econ-item:hover {
+    transform: translateY(-12px) scale(1.03);
+}
+
+.econ-item:hover::after {
+    opacity: 1;
+}
+
+.econ-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.econ-value {
+    font-size: 34px;
+    font-weight: bold;
+    color: #f6c84c;
+    margin: 15px 0;
+}
+
+.econ-desc {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+
+
+.ranking {
+    margin-top: 60px;
+}
+
+.ranking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.brand {
+    padding: 25px;
+    border-radius: 22px;
+    background: rgba(0,0,0,0.25);
+    text-align: center;
+    transition: 0.35s;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.brand:hover {
+    transform: translateY(-10px);
+    background: rgba(246,200,76,0.2);
+    box-shadow: 0 0 25px rgba(246,200,76,0.6);
+}
+
+.brand strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+
+
+.section-sub {
+    text-align: center;
+    max-width: 800px;
+    margin: 20px auto 0;
+    opacity: 0.9;
+}
+
+
