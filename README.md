@@ -51,6 +51,7 @@
 - Создание статей через блочную систему
 - Drag & Drop редактор
 - Кастомный мини WYSIWYG редактор
+- Позиционирование обложки
 
 ### 🌍 Мультиязычность
 - Поддержка нескольких языков
@@ -120,20 +121,26 @@
 
 ## 📸 Screenshots
 
-### Main Page
-![Main](screenshots/main.png)
+###Public Pages
+![The main oage - Liquid effects](screenshots/liquid.png)
+![The main page - Swiper slider](screenshots/swiper.png)
+![The economics page](screenshots/economy.png)
+![The food page](screenshots/food.png)
+![The tashkent page](screenshots/tashkent.png)
+![The uzbekistan page-svg](screenshots/svg.png)
+![The wiki page](screenshots/wiki.png)
+![The article view page](screenshots/article_view.png)
+![The profile page](screenshots/profile.jpg)
 
-### Article Page
-![Article](screenshots/article.png)
-
-### Admin Panel
-![Admin](screenshots/admin.png)
-
-### Editor (Drag & Drop)
-![Editor](screenshots/editor.png)
-
-### Multilingual Support
-![Lang](screenshots/lang.png)
+### Admin Pages
+![The articles page](screenshots/article_admin.png)
+![The create article page - custom WYSIWYG,block system](screenshots/create_article1.png)
+![The create article page - drag & drop,positioning of the cover](screenshots/create_article2.png)
+![The 2FA page - TOTP QR](screenshots/totp.png)
+![The wiki create page](screenshots/wiki_create.png)
+![The login events page](screenshots/events.jpg)
+![The userinfo page - session management](screenshots/sessions.jpg)
+![The users page - blocking users](screenshots/users.jpg)
 
 ---
 
