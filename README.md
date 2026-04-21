@@ -121,7 +121,7 @@
 
 ## 📸 Screenshots
 
-###Public Pages
+### Public Pages
 ![The main oage - Liquid effects](screenshots/liquid.png)
 ![The main page - Swiper slider](screenshots/swiper.png)
 ![The economics page](screenshots/economy.png)
