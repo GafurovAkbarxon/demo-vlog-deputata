@@ -13,5 +13,5 @@ Disallow: /login
 Disallow: /ru/admin/auth/2fa/
 Disallow: /auth/2fa/
 
-Sitemap: https:///sitemap.xml
-Sitemap: https://site.com/news-sitemap.xml
+Sitemap: https://vlogdeputata.uz/sitemap.xml
+Sitemap: https://vlogdeputata.uz/news-sitemap.xml

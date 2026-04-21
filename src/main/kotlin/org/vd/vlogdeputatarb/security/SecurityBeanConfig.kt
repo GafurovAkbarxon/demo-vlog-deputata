@@ -100,7 +100,8 @@ class SecurityBeanConfig(
                     "/image/**",
                     "/uploads/**",
                     "/robots.txt",
-                    "/sitemap.xml"
+                    "/sitemap.xml",
+                    "/news-sitemap.xml"
                 ).permitAll()
 
                 //admin
